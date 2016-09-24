@@ -3,13 +3,15 @@
  *
  *  Created on: 24 de set de 2016
  *      Author: leony
- *  OBS: Criado apenas para testar a priority queue
  */
 
 #include "priorityqueue.h"
 
 int main(){
 	int items[256], i;
+	for (i = 0; i < 256; i++){
+		items[i] = 0;
+	}
 	items[65] = 7;
 	items[69] = 3;
 	items[78] = 5;
