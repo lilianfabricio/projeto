@@ -16,6 +16,13 @@ int binary_decimal(long int binary)
     }
     return decimal;
 }
+int is_bit_i_set(unsigned char c, int i)
+{
+
+	unsigned char mask = 1 << i;
+	return mask & c;
+}
+
 struct tree
 {
     char letter;
@@ -78,12 +85,12 @@ int main ()
 	//Criar um arquivo formato FILE que vai receber o arquivo comprimido
 	FILE *compressed;
 	long lSize;
-	char *buffer;
+	unsigned char *buffer, aux1, aux2[2], aux5, aux6 = 255, aux7, auxx[14];
 	//O buffer vai armazenar o arquivo temporariamente em formato de string 
 	size_t result;
 	char aux[14];
-	int garbage, tree_size;
-	int j;
+	int garbage, tree_size, size = 0;
+	int trashSize, treeSize, aux3, aux4, j;
 	Huffman_tree *ht = create_empty();
 
 	// Abre o arquivo 'compressed.huff' em forma de binario (rb)
@@ -96,6 +103,46 @@ int main ()
 		exit (1);
 	}
 
+	//Aqui irá copiar o primeiro byte de "compressed" para o aux1
+	/*(O ponteiro para o bloco de memoria com o tamanho do item, o tamanho de cada elemento, 
+	o numero de elementos neste caso 1 byte, o arquivo de origem)*/
+	fread (&aux1, sizeof(unsigned char), 1, compressed);	
+	aux1 = aux1 >> 5;
+	// shift bit para a direita: Aqui pegamos o tamanho do lixo
+	trashSize = aux1;
+	//O arquivo agora aponta para deu inicio
+	rewind (compressed);
+
+	//Aqui vai copiar os dois primeiros bytes para o aux2
+	/*(O ponteiro para o bloco de memoria onde ficara, o tamanho de cada elemento, 
+	o numero de elementos neste caso 2 bytes, o arquivo de origem)*/
+	fread (&aux2, sizeof(unsigned char), 2, compressed);
+	//Aqui é o tamanho da arvore
+	aux2[0] = aux2[0];
+	for(int k = 8, h = 0; h < 5; h++, k++)
+	{
+
+
+		if(is_bit_i_set(aux2[0], h))
+		{
+			size = size + pow(2, k);
+		}
+	}
+	size = size + (aux2[1]);
+	
+	printf("LIXO: %d TAMANHO ARvORE: %d\n", trashSize, size);
+	//Isso faz com que "tire" os tres primeiros bits do byte que contem o tamanho do lixo
+
+	aux3 = aux2[0];
+	aux4 = aux2[1];
+	printf("AUX4: %d\n", aux4);
+	//Esse pega o resto do tamanho da arvore, ou seja, o proximo byte	
+	
+
+	char tree[11];
+	fread(&tree, sizeof(char), 11, compressed);
+	printf("%s\n", tree);
+
 
 	// Obtem o tamanho do arquivo indo do byte do inicio do arquivo até o ultimo
 	fseek (compressed , 0 , SEEK_END);
@@ -105,7 +152,7 @@ int main ()
 	rewind(compressed);
 
 	// Aloca memoria do tamanho do arquivo para criar o buffer
-	buffer = (char*) malloc (sizeof(char)*lSize);
+	buffer = (char*) malloc (sizeof(unsigned char)*lSize);
 	if (buffer == NULL)
 	{
 		printf("Erro de memoria\n"); 
@@ -140,6 +187,7 @@ int main ()
 	{
 		aux[j] = buffer[i];
 	}
+
 	aux[16] = '\0';
 	tree_size = atoi(aux);
 	tree_size = binary_decimal(tree_size);
