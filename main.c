@@ -3,6 +3,7 @@
  *
  *  Created on: 24 de set de 2016
  *      Author: leony
+ *  OBS: Criado apenas para testar a priority queue
  */
 
 #include "priorityqueue.h"
