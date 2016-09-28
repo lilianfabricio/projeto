@@ -81,6 +81,7 @@ Node *dequeue (Priority_Queue *pq){
 
 Node *build_tree (Priority_Queue *pq){
 	if (!is_unique(pq)){
+		//obs: aqui é necessario um loop pra restar apenas um elemento na fila, que será o nó da árvore, falta fazer isso!!
 		Node *aux1 = dequeue(pq);
 		Node *aux2 = dequeue(pq);
 		int freq = aux1->frequency + aux2->frequency;
