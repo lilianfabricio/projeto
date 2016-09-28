@@ -5,9 +5,10 @@
  *      Author: leony
  */
 
-#include "priorityqueue.h"
+#include "huffnode.h"
 
-int main(){
+int main()
+{
 	int items[256], i;
 	for (i = 0; i < 256; i++){
 		items[i] = 0;
@@ -15,7 +16,7 @@ int main(){
 	items[65] = 7;
 	items[69] = 3;
 	items[78] = 5;
-	items[83] = 0;
+	items[83] = 1;
 	items[70] = 2;
 	items[74] = 6;
 	items[80] = 4;
@@ -26,6 +27,10 @@ int main(){
 			enqueue_sorted(pq, new_node);
 		}
 	}
+	print_queue(pq);
+	Node *root = build_tree(pq);
+	print_tree_pre_order(root);
+	printf("\n");
 	print_queue(pq);
 	return 0;
 }
