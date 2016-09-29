@@ -122,13 +122,13 @@ int main ()
     }
     // Soma o valor acumulado do looping, e o valor do segundo byte
     size = size + (aux2[1]);
+    printf("Tamanho da arvore: %d, Tamanho do lixo: %d\n", size, trashSize);
     
-    printf("LIXO: %d TAMANHO ARvORE: %d\n", trashSize, size);  
     char tree[size]; 
 
    
     fread(&tree, sizeof(char), size, compressed);
-    printf("%s\n", tree);
+   
 
 
 
@@ -136,12 +136,11 @@ int main ()
     fseek (compressed , 0 , SEEK_END);
     //ftell: Retorna o numero de bytes a partir do inicio do arquivo em arquivos binarios
     lSize = ftell(compressed);
-    printf("lsize %ld\n", lSize);
     // Define o arquivo para o inicio do arquivo
     rewind(compressed);
 
     // Aloca memoria do tamanho do arquivo para criar o buffer
-    buffer = (char*) malloc (sizeof(unsigned char)*lSize);
+    buffer = (unsigned char*) malloc (sizeof(unsigned char)*lSize);
 
 
     //Copia o arquivo para o buffer
@@ -150,9 +149,39 @@ int main ()
     fread (buffer, 1, lSize, compressed);
     /*Result é o tamanho de arquivos lidos com sucesso. Se o numero de arquivos lidos com sucesso for diferente 
     do tamanho da string, ocorreu um erro na leitura */
+    int contador = 2 + size;
 
+    int auxiliar = lSize - contador;    
+    unsigned char auxiliar_transf[auxiliar];
+    int binario[auxiliar * 8];
+    printf("Auxiliar: %d\n", (auxiliar));
+    for(int l = 0, k = contador; l < auxiliar; l++, k++)
+    {
+        auxiliar_transf[l] = buffer[k];
+    }
+    auxiliar_transf[auxiliar] = '\0';
+    printf("%s\n", auxiliar_transf);
+    
+    int l = 0, h = 0;
+    for(int z = 0; z < auxiliar; z++)
+    {
+        printf("AUXILIAR_TRANF: %c\n", auxiliar_transf[z]);
+        //Essa parte precisa virar uma funçao!
+         for (i = 0; i < 8; i++) 
+        {
+            binario[h] = !!((auxiliar_transf[z] << i) & 0x80);
+        }
+        h = h + i;        
+    }
+
+    for(int z = 0; z < h; z++)
+    {
+        printf("%d", binario[z]);
+    }
+    printf("\n");
     /*
-    char a;
+    
+    char a = 'g';
     int i;
     int binary[8];
 
@@ -167,8 +196,9 @@ int main ()
     }
     printf("\n");
     */
+    
 
-    printf("BUFFER: %s\n", buffer);
+
 
 
 
@@ -176,6 +206,7 @@ int main ()
     i = 0;
     ht = add(ht, tree);
     print_pre_order(ht);
+    printf("\n");
 
     fclose (compressed);
     free (buffer);
