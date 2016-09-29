@@ -8,8 +8,8 @@ int is_bit_i_set(unsigned char c, int i)
     //Isso verifica se o bit é 1 ou 0
     unsigned char mask = 1 << i;
     return mask & c;
-}
 
+}
 struct tree
 {
     char letter;
@@ -72,7 +72,7 @@ int main ()
 
     //Criar um arquivo formato FILE que vai receber o arquivo comprimido
     FILE *compressed;
-    long lSize;
+    long int lSize;
     //unsigned porque nao tem o bit do sinal
     unsigned char *buffer, aux1, aux2[2], aux5, aux6 = 255, aux7, auxx[14];
     //O buffer vai armazenar o arquivo temporariamente em formato de string 
@@ -130,33 +130,49 @@ int main ()
     fread(&tree, sizeof(char), size, compressed);
     printf("%s\n", tree);
 
+
+
     // Obtem o tamanho do arquivo indo do byte do inicio do arquivo até o ultimo
     fseek (compressed , 0 , SEEK_END);
     //ftell: Retorna o numero de bytes a partir do inicio do arquivo em arquivos binarios
     lSize = ftell(compressed);
+    printf("lsize %ld\n", lSize);
     // Define o arquivo para o inicio do arquivo
     rewind(compressed);
 
     // Aloca memoria do tamanho do arquivo para criar o buffer
     buffer = (char*) malloc (sizeof(unsigned char)*lSize);
-    if (buffer == NULL)
-    {
-        printf("Erro de memoria\n"); 
-        exit (2);
-    }
+
 
     //Copia o arquivo para o buffer
-    /*(O ponteiro para o bloco de memoria com o tamanho do arquivo, o tamanho em binario de cada elemento, 
+    /*(O ponteiro para o bloco de memoria com o tamanho do arquivo, o tamanho em bytes de cada elemento, 
     o numero de elementos, o arquivo de origem)*/
-    result = fread (buffer, 1, lSize, compressed);
+    fread (buffer, 1, lSize, compressed);
     /*Result é o tamanho de arquivos lidos com sucesso. Se o numero de arquivos lidos com sucesso for diferente 
     do tamanho da string, ocorreu um erro na leitura */
-    if (result != lSize) 
+
+    /*
+    char a;
+    int i;
+    int binary[8];
+
+    //Essa parte precisa virar uma funçao!
+    for (i = 0; i < 8; i++) 
     {
-        fputs ("Erro de leitura\n",stderr); 
-        exit (3);
+        binary[i] = !!((a << i) & 0x80);
     }
-    
+    for(int z = 0; z < 8; z++)
+    {
+        printf("%d", binary[z]);
+    }
+    printf("\n");
+    */
+
+    printf("BUFFER: %s\n", buffer);
+
+
+
+
     i = 0;
     ht = add(ht, tree);
     print_pre_order(ht);
