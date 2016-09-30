@@ -15,11 +15,11 @@ int main()
 	}
 	items[65] = 7;
 	items[69] = 3;
-	items[78] = 5;
-	items[83] = 1;
-	items[70] = 2;
-	items[74] = 6;
-	items[80] = 4;
+	items[70] = 5;
+	items[74] = 1;
+	items[78] = 2;
+	items[80] = 6;
+	items[83] = 4;
 	Priority_Queue *pq = create_priority_queue();
 	for (i = 0; i < 256; i++){
 		if (items[i] > 0){
@@ -28,9 +28,9 @@ int main()
 		}
 	}
 	print_queue(pq);
-	Node *root = build_tree(pq);
+	Node *root = NULL;
+	root = build_tree(pq);
 	print_tree_pre_order(root);
 	printf("\n");
-	print_queue(pq);
 	return 0;
 }

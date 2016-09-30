@@ -20,6 +20,7 @@ struct node{
 
 struct priority_queue{
 	Node *first;
+	Node *last;
 };
 
 Node *create_node(char carac, int freq){
@@ -36,11 +37,8 @@ Node *create_node(char carac, int freq){
 Priority_Queue *create_priority_queue(){
 	Priority_Queue *new_pq = (Priority_Queue*)malloc(sizeof(Priority_Queue));
 	new_pq->first = NULL;
+	new_pq->last = NULL;
 	return new_pq;
-}
-
-int is_empty(Priority_Queue *pq){
-	return (pq->first == NULL);
 }
 
 int is_unique(Priority_Queue *pq){
@@ -48,11 +46,16 @@ int is_unique(Priority_Queue *pq){
 }
 
 void enqueue_sorted(Priority_Queue *pq, Node *node){
-	if(pq->first == NULL || node->frequency <= pq->first->frequency){
+	if(pq->first == NULL) {
+		pq->first = node;
+		pq->last = node;
+	} else if(node->frequency <= pq->first->frequency) {
 		node->next = pq->first;
 		pq->first = node;
-	}
-	else{
+	} else if(node->frequency > pq->last->frequency) {
+		pq->last->next = node;
+		pq->last = node;
+	} else {
 		Node *aux = pq->first;
 		while(node->frequency > aux->next->frequency && aux->next != NULL){
 			aux = aux->next;
@@ -80,8 +83,7 @@ Node *dequeue (Priority_Queue *pq){
 }
 
 Node *build_tree (Priority_Queue *pq){
-	if (!is_unique(pq)){
-		//obs: aqui é necessario um loop pra restar apenas um elemento na fila, que será o nó da árvore, falta fazer isso!!
+	while (!is_unique(pq)){
 		Node *aux1 = dequeue(pq);
 		Node *aux2 = dequeue(pq);
 		int freq = aux1->frequency + aux2->frequency;
@@ -91,15 +93,14 @@ Node *build_tree (Priority_Queue *pq){
 		new->left = aux1;
 		new->right = aux2;
 		new->next = NULL;
-		enqueue_sorted(pq, new);
-		return new;
+		enqueue_sorted(pq,new);
 	}
 	return pq->first;
 }
 
-void print_tree_pre_order(Node *root){
+void print_tree_pre_order(Node *root, FILE *arq){
 	if(root != NULL){
-		printf("%c", root->item);
+		fprintf(arq, "%c", root->item);
 		print_tree_pre_order(root->left);
 		print_tree_pre_order(root->right);
 	}
