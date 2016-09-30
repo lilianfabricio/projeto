@@ -192,6 +192,9 @@ int main ()
 
     Huffman_tree *auxt = ht;
 
+    FILE *arq = fopen("decompressed.txt", "wt");
+    
+
     for(i = 0; i < k - 1; i++)
     {
         if(binario[i] == 0)
@@ -203,10 +206,11 @@ int main ()
         }
         if(is_leaf(auxt))
         {
-            printf("%c\n", auxt->letter);
+            printf("%c", auxt->letter);
             auxt = ht;
         }
-    }    
+    }   
+    printf("\n"); 
 
     //Fechamos o arquivo comprimido aqui
     fclose (compressed);
