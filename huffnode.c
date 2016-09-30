@@ -101,8 +101,16 @@ Node *build_tree (Priority_Queue *pq){
 void print_tree_pre_order(Node *root, FILE *arq){
 	if(root != NULL){
 		fprintf(arq, "%c", root->item);
-		print_tree_pre_order(root->left);
-		print_tree_pre_order(root->right);
+		print_tree_pre_order(root->left, arq);
+		print_tree_pre_order(root->right, arq);
+	}
+}
+
+int tree_size(Node *root){
+	if(root == NULL) return 0;
+	else{
+		int size = 1 + tree_size(root->left) + tree_size(root->right);
+		return size;
 	}
 }
 

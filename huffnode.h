@@ -31,6 +31,8 @@ Node *dequeue (Priority_Queue *pq);
 
 Node *build_tree (Priority_Queue *pq);
 
-void print_tree_pre_order(Node *root);
+void print_tree_pre_order(Node *root, FILE *arq);
+
+int tree_size(Node *root);
 
 #endif /* HUFFNODE_H_ */
