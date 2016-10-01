@@ -63,9 +63,8 @@ int main()
 	arq = fopen("compressed.txt", "w+");
 	root = build_tree(pq);
 	print_tree_pre_order(root, arq);
-	
-	fclose(arq);
 
+	rewind(arq);
 	int size = tree_size(root);
 	unsigned char code1[size/2], tree[size];
 	
@@ -75,6 +74,8 @@ int main()
 	}
 	tree[i] = '\0';
 	printf("%s\n", tree);
+	
+	fclose(arq);
 	
 	/*funcao(hash, tree, code1);
 
