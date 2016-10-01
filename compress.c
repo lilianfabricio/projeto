@@ -74,7 +74,7 @@ int main()
 		fscanf(arq, "%c", &tree[i]);
 	}
 	tree[i] = '\0';
-	puts(tree);
+	printf("%s\n", tree);
 	
 	/*funcao(hash, tree, code1);
 
