@@ -21,7 +21,7 @@ typedef struct element
 
 typedef struct hash
 {
-	Element* table[MAX_HASH];
+	Element table[MAX_HASH];
 }HashHuff;
 
 HashHuff* create_hash()
