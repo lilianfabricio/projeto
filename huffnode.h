@@ -36,6 +36,6 @@ int tree_size(Node *root);
 
 int is_leaf(Node *node);
 
-void funcao(HashHuff *h, Node *root, unsigned char *c);
+void funcao(HashHuff *h, unsigned char *tree, unsigned char *c);
 
 #endif /* HUFFNODE_H_ */

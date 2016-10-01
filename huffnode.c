@@ -9,6 +9,7 @@
 #define PRIORITY_QUEUE_C_
 
 #include "huffnode.h"
+#include "hash.h"
 
 typedef struct node
 {
@@ -87,9 +88,11 @@ void enqueue_sorted(Priority_Queue *pq, Node *node)
 
 void print_queue(Priority_Queue *pq)
 {
-	if(pq != NULL)
+	Node *aux = pq->first;
+	while(aux != NULL)
 	{
-		printf("%c %d\n", pq->first->item, pq->first->frequency);
+		printf("%c %d\n", aux->item, aux->frequency);
+		aux = aux->next;
 	}
 }
 
@@ -120,12 +123,10 @@ Node* build_tree(Priority_Queue *pq)
 
 		int freq = aux1->frequency + aux2->frequency;
 
-		Node *new_n = (Node*) malloc(sizeof(Node));
+		Node *new_n = create_node('*', freq);
 
-		new_n->frequency = freq;
-		new_n->item = '*';
 		new_n->left = aux1;
-		new_n->next = aux2;
+		new_n->right = aux2;
 
 		enqueue_sorted(pq, new_n);
 	}
@@ -167,21 +168,39 @@ int is_leaf(Node *node)
 	return (node->left == NULL && node->right == NULL);
 }
 
-void funcao(HashHuff *h, Node *root, unsigned char *c)
+void funcao(HashHuff *h, unsigned char *tree, unsigned char *c)
 {
-	if(root != NULL)
+	int lado = 0, i, j;
+	for(i = 0, j = 0; tree[i] != '\0'; i++)
 	{
-		if(is_leaf(root))
+		if(tree[i] == '*')
 		{
-			put( h, root->item, c);
-			c = c - 1;
+			if(lado == 0)
+			{
+				c[j] = '0';
+			}
+			else
+			{
+				c[j] = '1';
+			}
+			j++;
 		}
 		else
 		{
-			c[0] = 0;
-			funcao( h, root->left, (c+1));
-			c[0] = 1;
-			funcao( h, root->right, (c+1));
+			if(tree[i] == 92)
+			{
+				i++;
+			}
+			put(h, *(tree+i), (c-j));
+			c[--j] = 'e';
+			if(lado == 0)
+			{
+				lado = 1;
+			}
+			else
+			{
+				lado = 0;
+			}
 		}
 	}
 }
