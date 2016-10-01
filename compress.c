@@ -60,16 +60,18 @@ int main()
 		}
 	}
 
-	arq = fopen("compressed.huff", "w+");
+	arq = fopen("compressed.txt", "w+");
 	root = build_tree(pq);
 	print_tree_pre_order(root, arq);
+	
+	fclose(arq);
 
-	int size = tree_size(root);
+	/*int size = tree_size(root);
 	unsigned char code1[size/2], tree[size];
 	fscanf(arq, "%s", tree);
 	puts(tree);
 	
-	/*funcao(hash, tree, code1);
+	funcao(hash, tree, code1);
 
 	print_hash(hash);
 
