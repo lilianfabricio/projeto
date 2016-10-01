@@ -44,6 +44,8 @@ void put(HashHuff *ht, unsigned char key, unsigned char *val)
 	
 	new_e->value = key;
 	
+	printf("%c", h);
+	
 	while(val[i] == '1' || val[i] == '0')
 	{
 		i++;
