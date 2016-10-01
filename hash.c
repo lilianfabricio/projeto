@@ -63,9 +63,10 @@ void put(HashHuff *ht, unsigned char key, unsigned char *val)
 	}
 	new_e->code[i] = '\0';
 	
-	ht->table[h] = new_e;
-	printf("%c %d %s\n", ht->table[h]->value, i, ht->table[h]->code);
+	printf("%c %d %s\n", new_e->value, i, new_e->code);
 	
+	//ht->table[h] = new_e;
+	//printf("%c %d %s\n", ht->table[h]->value, i, ht->table[h]->code);
 }
 
 void print_hash(HashHuff *h)
