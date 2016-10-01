@@ -42,7 +42,7 @@ int main()
         printf("Erro na abertura do arquivo.\n");
         system("PAUSE");
         exit(0);
-    }
+    	}
 	while(!feof(arqE))
 	{
 		fscanf(arqE,"%c", &aux);
@@ -60,18 +60,20 @@ int main()
 		}
 	}
 
-	arq = fopen("compressed.txt", "w+");
+	arq = fopen("compressed.huff", "w+");
 	root = build_tree(pq);
 	print_tree_pre_order(root, arq);
 
 	int size = tree_size(root);
 	unsigned char code1[size/2], tree[size];
 	fscanf(arq, "%s", tree);
-	funcao(hash, tree, code1);
+	puts(tree);
+	
+	/*funcao(hash, tree, code1);
 
 	print_hash(hash);
 
-	/*rewind(arqE);
+	rewind(arqE);
 	arqS = fopen("compressed.huff", "w+");
 	if(size < 255)
 	{
