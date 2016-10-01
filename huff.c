@@ -27,7 +27,8 @@ int is_empty(Huffman_tree *ht)
     return(ht == NULL);
 }
 
-int is_leaf(Huffman_tree *ht){
+int is_leaf(Huffman_tree *ht)
+{
     return (ht->left == NULL && ht->right == NULL);
 }
 
@@ -130,35 +131,38 @@ int main ()
     esta apontando agora no arquivo */
     fread(&tree, sizeof(char), size, compressed);
     printf("ARVORE: \n");
+
     //Aqui é onde a string é enviada para a funçao que vai adicionar os caracteres a arvore     
     i = 0;
-    //Enviamos o ponteiro que aponta para a raiz da arvore e a string "tree", que contem os caracteres da arvore
-    
+    //Enviamos o ponteiro que aponta para a raiz da arvore e a string "tree", que contem os caracteres da arvore    
     ht = add(ht, tree);
     print_pre_order(ht);
     printf("\n");
 
+
     fseek (compressed, 0, SEEK_END);
-
+    //A funçao ftell retorna o tamanho total em bytes do inicio do arquivo até o fim
     tamanho_total = ftell(compressed);
-
+    //A funçao rewind faz o arquivo voltar a apontar para seu inicio
     rewind(compressed);
-
+    //Coordenadas é o numero de bytes a partir do fim da arvore, ou seja, as "coordenadas" da descompressão
     coordenadas = tamanho_total - (2 + size);
+    //String que contem as "coordenadas"
+    unsigned char *array_resto;
+    array_resto = (unsigned char*) malloc (sizeof(unsigned char)*coordenadas);
 
-    char array_resto[coordenadas];
-
-
+    //O buffer é uma estrutura que armazena temporariamente o arquivo inteiro para facil manipulaçao 
     buffer = (unsigned char*) malloc (sizeof(unsigned char)*tamanho_total);
-    
-
+    /*Copia todo o arquivo para o buffer, e a funçao tem como paramentro: 
+    (O local onde esta alocada memoria para o buffer, o tamanho da copia por vez ou seja 1 byte, o tamanho total em bytes
+    do arquivo de origem e o arquivo de origem*/
     fread (buffer, 1, tamanho_total, compressed);
-
-    
+    //É uma simples copia, das coordenadas que estao no buffer para uma string 
     for(int r = 0, o = (2 + size); r < coordenadas; r++, o++)
     {
         array_resto[r] = buffer[o];
     }
+
 
     for(int r = 0; r < coordenadas; r++)
     {
@@ -181,6 +185,7 @@ int main ()
         }
     }
     k = (k - trashSize);
+    printf("%d\n", k);
 
     for ( i = 0; i < k ; i++)
     {
@@ -189,10 +194,12 @@ int main ()
     printf("\n");
     
     free(buffer);
+    free(array_resto);
 
     Huffman_tree *auxt = ht;
 
-    for(i = 0; i < k - 1; i++)
+    FILE *arq = fopen("decompressed.txt", "wt");
+    for(i = 0; i < k ; i++)
     {
         if(binario[i] == 0)
         {
@@ -203,10 +210,14 @@ int main ()
         }
         if(is_leaf(auxt))
         {
-            printf("%c\n", auxt->letter);
+            printf("%c", auxt->letter);
+            fprintf(arq,"%c",  auxt->letter);
             auxt = ht;
         }
-    }    
+    }   
+
+    printf("\n"); 
+    fclose(arq);
 
     //Fechamos o arquivo comprimido aqui
     fclose (compressed);
