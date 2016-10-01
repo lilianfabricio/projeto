@@ -45,29 +45,27 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 void put(HashHuff *ht, unsigned char key, unsigned char *val)
 {	
 	int h, i;
+	Element *new_e;
 	h = key % MAX_HASH;
-
-	for(i = 0; val[i] == '0' || val[i] == '1'; i++)
-	{
-		printf("%c\n", val[i]);
-	}
 	
-	i = 0;
-	ht->table[h]->value = key;
+	new_e = (Element*) malloc(sizeof(Element));
+	new_e->value = key;
+	
 	while(val[i] == '1' || val[i] == '0')
 	{
 		i++;
 	}
-	
-	printf("%c %d\n", ht->table[h]->value, i);
-	
-	/*ht->table[h]->code = malloc(i*sizeof(unsigned char));
+	new_e->code = malloc(i*sizeof(unsigned char));
 	
 	for(i = 0; val[i] == '1' || val[i] == '0'; i++)
 	{
-		ht->table[h]->code[i] = val[i];
+		new_e->code[i] = val[i];
 	}
-	ht->table[h]->code[i] = '\0';*/
+	new_e->code[i] = '\0';
+	
+	ht->table[h] = new_e;
+	printf("%c %d %s\n", ht->table[h]->value, i, ht->table[h]->code);
+	
 }
 
 void print_hash(HashHuff *h)
