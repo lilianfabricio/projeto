@@ -43,11 +43,16 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 }
 
 void put(HashHuff *ht, unsigned char key, unsigned char *val)
-{
+{	
 	int h, i, count;
 	h = key % MAX_HASH;
 
-	i = 0;
+	for(i = 0; val[i] == '0' || val[i] == '1'; i++)
+	{
+		printf("%c\n", val[i]);
+	}
+	
+	/*i = 0;
 	ht->table[h]->value = key;
 	while(val[i] == '1' || val[i] == '0')
 	{
@@ -60,7 +65,7 @@ void put(HashHuff *ht, unsigned char key, unsigned char *val)
 	{
 		ht->table[h]->code[i] = val[i];
 	}
-	ht->table[h]->code[i] = '\0';
+	ht->table[h]->code[i] = '\0';*/
 }
 
 void print_hash(HashHuff *h)
