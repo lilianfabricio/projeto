@@ -73,15 +73,14 @@ int main()
 		fscanf(arq, "%c", &tree[i]);
 	}
 	tree[i] = '\0';
-	printf("%s\n", tree);
 	
 	fclose(arq);
 	
-	/*funcao(hash, tree, code1);
+	funcao(hash, tree, code1);
 
 	print_hash(hash);
 
-	rewind(arqE);
+	/*rewind(arqE);
 	arqS = fopen("compressed.huff", "w+");
 	if(size < 255)
 	{
