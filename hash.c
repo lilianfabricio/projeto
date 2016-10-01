@@ -27,12 +27,6 @@ typedef struct hash
 HashHuff* create_hash()
 {
 	HashHuff *ht = (HashHuff*) malloc(sizeof(HashHuff));
-	int i;
-
-	for(i = 0; i < MAX_HASH; i++)
-	{
-		ht->table[i] = NULL;
-	}
 
 	return ht;
 }
@@ -45,10 +39,9 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 void put(HashHuff *ht, unsigned char key, unsigned char *val)
 {	
 	int h, i;
-	Element *new_e;
+	Element new_e;
 	h = key % MAX_HASH;
 	
-	new_e = (Element*) malloc(sizeof(Element));
 	new_e->value = key;
 	
 	while(val[i] == '1' || val[i] == '0')
