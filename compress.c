@@ -66,12 +66,17 @@ int main()
 	
 	fclose(arq);
 
-	/*int size = tree_size(root);
+	int size = tree_size(root);
 	unsigned char code1[size/2], tree[size];
-	fscanf(arq, "%s", tree);
+	
+	for(i = 0; i < size; i++)
+	{
+		fscanf(arq, "%c", &tree[i]);
+	}
+	tree[i] = '\0';
 	puts(tree);
 	
-	funcao(hash, tree, code1);
+	/*funcao(hash, tree, code1);
 
 	print_hash(hash);
 
