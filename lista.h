@@ -9,7 +9,7 @@ typedef struct node_list NodeList;
 
 typedef struct list List;
 
-NodeList* createlist();
+List* createlist();
 
 void insertnode(List* l, unsigned char c);
 

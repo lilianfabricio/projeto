@@ -17,7 +17,7 @@ struct list
 	NodeList* last;
 };
 
-NodeList* createlist()
+List* createlist()
 {
 	List *newlist = (List*) malloc(sizeof(List));
 	newlist->first = NULL;
@@ -44,8 +44,8 @@ void insertnode(List* l, unsigned char c)
 
 void freelist(List* l)
 {
-	NodeList *current, *aux = list->first;
-	while(aux != list->last)
+	NodeList *current, *aux = l->first;
+	while(aux != l->last)
 	{
 		current = aux->next;
 		free(aux);

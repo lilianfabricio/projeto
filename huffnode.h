@@ -1,3 +1,10 @@
+/*
+ * priorityqueue.h
+ *
+ *  Created on: 25 de set de 2016
+ *      Author: vitor_000
+ */
+
 #ifndef HUFFNODE_H_
 #define HUFFNODE_H_
 

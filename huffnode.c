@@ -1,3 +1,10 @@
+/*
+ * priorityqueue.c
+ *
+ *  Created on: 25 de set de 2016
+ *      Author: vitor_000
+ */
+
 #ifndef PRIORITY_QUEUE_C_
 #define PRIORITY_QUEUE_C_
 
@@ -20,6 +27,10 @@ typedef struct pqueue
 	Node *last;
 }Priority_Queue;
 
+/* Função create_node: Aloca um espaço de memória correspondente a um nó,
+ * enviando como parâmetros um caracter e sua frequência no texto.
+ */
+
 Node* create_node(unsigned char carac, int freq)
 {
 	Node* new_node = (Node*) malloc(sizeof(Node));
@@ -34,6 +45,10 @@ Node* create_node(unsigned char carac, int freq)
 	return new_node;
 }
 
+/* Função create_priority_queue: Aloca um espaço de memória correspondente a
+ * uma fila de prioridades vazia.
+ */
+
 Priority_Queue* create_priority_queue()
 {
 	Priority_Queue *new_pq = (Priority_Queue*) malloc(sizeof(Priority_Queue));
@@ -43,10 +58,20 @@ Priority_Queue* create_priority_queue()
 	return new_pq;
 }
 
+/* Funçâo is_unique: Dada uma fila de prioridades, a função verifica se
+ * esta fila possui apenas um elemento. A função será utilizada na
+ * construção da árvore de Huffman.
+ */
+
 int is_unique(Priority_Queue *pq)
 {
 	return (pq->first->next == NULL);
 }
+
+/* Função enqueue_sorted: Dada uma fila de prioridades e um nó, a função
+ * insere este nó na fila de prioridade, em sua devida posição tendo
+ * como parâmetro de ordenação sua frequência no texto.
+ */
 
 void enqueue_sorted(Priority_Queue *pq, Node *node)
 {

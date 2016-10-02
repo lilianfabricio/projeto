@@ -1,3 +1,10 @@
+/*
+ * Hash.c
+ *
+ *  Created on: 26 de set de 2016
+ *      Author: vitor_000
+ */
+
 #ifndef HASH_C_
 #define HASH_C_
 
@@ -5,21 +12,28 @@
 #include "lista.h"
 
 #define MAX_HASH 256
+#define MAX_CODE 148
 
 typedef struct element
 {
 	unsigned char value;
-	unsigned char *code;
+	unsigned char* code;
 }Element;
 
 typedef struct hash
 {
-	Element table[MAX_HASH];
+	Element* table[MAX_HASH];
 }HashHuff;
 
 HashHuff* create_hash()
 {
 	HashHuff *ht = (HashHuff*) malloc(sizeof(HashHuff));
+	int i;
+
+	for(i = 0; i < MAX_HASH; i++)
+	{
+		ht->table[i] = NULL;
+	}
 
 	return ht;
 }
@@ -30,7 +44,7 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 }
 
 void put(HashHuff *ht, unsigned char key, List* l)
-{	
+{
 	int i, count, h;
 	NodeList *aux;
 	Element *new_e = (Element*) malloc(sizeof(Element));
@@ -44,12 +58,12 @@ void put(HashHuff *ht, unsigned char key, List* l)
 	}
 	new_e->code = (unsigned char*) malloc(count*sizeof(unsigned char));
 
-	for(i = 0, aux = l->first; i < count && aux ! NULL; i++, aux = aux->next)
+	for(i = 0, aux = l->first; i < count && aux != NULL; i++, aux = aux->next)
 	{
 		new_e->code[i] = aux->c;
 	}
 
-	ht->table[h] = *(new_e);
+	ht->table[h] = new_e;
 }
 
 void print_hash(HashHuff *h)

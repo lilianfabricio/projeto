@@ -1,6 +1,12 @@
+/*
+ * main.c
+ *
+ *  Created on: 30 de set de 2016
+ *      Author: vitor_000
+ */
+
 #include "hash.h"
 #include "huffnode.h"
-#include "lista.h"
 
 #define MAX 256
 
@@ -36,7 +42,7 @@ int main()
         printf("Erro na abertura do arquivo.\n");
         system("PAUSE");
         exit(0);
-    	}
+    }
 	while(!feof(arqE))
 	{
 		fscanf(arqE,"%c", &aux);
@@ -59,16 +65,16 @@ int main()
 	print_tree_pre_order(root, arq);
 
 	rewind(arq);
+
 	int size = tree_size(root);
 	unsigned char tree[size];
 	List* listacod = createlist();
-	
+
 	for(i = 0; i < size; i++)
 	{
 		fscanf(arq, "%c", &tree[i]);
 	}
 	tree[i] = '\0';
-	
 	funcao(hash, tree, listacod, '0');
 
 	print_hash(hash);
@@ -124,7 +130,6 @@ int main()
 
 		fclose(arqS);
 	}*/
-
 	fclose(arq);
     fclose(arqE);
 
