@@ -38,7 +38,7 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 
 void put(HashHuff *ht, unsigned char key, unsigned char *val)
 {	
-	int h, i;
+	int h, i = 0;
 	Element new_e;
 	h = key % MAX_HASH;
 	
