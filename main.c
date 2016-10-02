@@ -7,6 +7,7 @@
 
 /*#include "huffnode.h"
 #include "hash.h"
+#include "lista.h"
 
 int main()
 {

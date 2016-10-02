@@ -50,14 +50,14 @@ int listsize(List* list)
 	return list->tam;
 }
 
-NodeList* removenode(List* l)
+unsigned char removenode(List* l)
 {
 	NodeList* aux;
 	aux = l->first;
 	l->first = aux->next;
 	aux->next = NULL;
 
-	return aux;
+	return aux->c;
 }
 
 #endif /* LISTA_C_ */

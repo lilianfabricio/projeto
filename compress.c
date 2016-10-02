@@ -7,6 +7,7 @@
 
 #include "hash.h"
 #include "huffnode.h"
+#include "lista.h"
 
 #define MAX 256
 

@@ -15,6 +15,6 @@ void insertnode(List* l, unsigned char c);
 
 int listsize(List* list);
 
-NodeList* removenode(List* l);
+unsigned char removenode(List* l);
 
 #endif /* LISTA_H_ */
