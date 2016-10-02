@@ -1,16 +1,10 @@
-/*
- * priorityqueue.h
- *
- *  Created on: 25 de set de 2016
- *      Author: vitor_000
- */
-
 #ifndef HUFFNODE_H_
 #define HUFFNODE_H_
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "Hash.h"
+#include "hash.h"
+#include "lista.h"
 
 typedef struct node Node;
 
@@ -36,6 +30,6 @@ int tree_size(Node *root);
 
 int is_leaf(Node *node);
 
-void funcao(HashHuff *h, unsigned char *tree, unsigned char *c);
+void funcao(HashHuff *h, unsigned char *tree, List *l, unsigned char lado);
 
 #endif /* HUFFNODE_H_ */

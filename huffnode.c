@@ -1,15 +1,9 @@
-/*
- * priorityqueue.c
- *
- *  Created on: 25 de set de 2016
- *      Author: vitor_000
- */
-
 #ifndef PRIORITY_QUEUE_C_
 #define PRIORITY_QUEUE_C_
 
 #include "huffnode.h"
 #include "hash.h"
+#include "lista.h"
 
 typedef struct node
 {
@@ -168,38 +162,29 @@ int is_leaf(Node *node)
 	return (node->left == NULL && node->right == NULL);
 }
 
-void funcao(HashHuff *h, unsigned char *tree, unsigned char *c)
+void funcao(HashHuff *h, unsigned char *tree, List *l, unsigned char lado)
 {
-	int lado = 0, i, j, UNN = 0;
-	for(i = 0, j = 0; tree[i] != '\0'; i++)
+	if(tree[0] != '\0')
 	{
-		if(tree[i] == '*')
+		if(tree[0] == '*')
 		{
-			c[j] = '0';
-			UNN = 0;
-			j++;
+			insertnode(l, lado);
+			funcao(h, tree+1, l, lado);
 		}
 		else
 		{
-			if(tree[i] == 92)
+			put(h, *(tree), l);
+			if(lado == '0')
 			{
-				i++;
-			}
-			put(h, *(tree+i), (c));
-			j--;
-			if(lado == 0 && UNN == 0)
-			{
-				c[j] = '1';
-				lado = 1;
+				lado = '1';
 			}
 			else
 			{
-				c[j] = 'e';
-				c[--j] = '1';
-				lado = 0;
+				lado = '0';
 			}
-			UNN = 1;
-			j++;
+			freelist(l);
+			l = createlist();
+			funcao(h, tree+1, l, lado);
 		}
 	}
 }

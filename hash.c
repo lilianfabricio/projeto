@@ -1,10 +1,3 @@
-/*
- * Hash.c
- *
- *  Created on: 26 de set de 2016
- *      Author: vitor_000
- */
-
 #ifndef HASH_C_
 #define HASH_C_
 
@@ -39,12 +32,11 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 void put(HashHuff *ht, unsigned char key, unsigned char *val)
 {	
 	int h, i = 0;
-	Element new_e;
+	Element *new_e;
 	h = key % MAX_HASH;
 	
+	new_e = (Element*) malloc(sizeof(Element));
 	new_e->value = key;
-	
-	printf("%c", h);
 	
 	while(val[i] == '1' || val[i] == '0')
 	{
@@ -56,12 +48,9 @@ void put(HashHuff *ht, unsigned char key, unsigned char *val)
 	{
 		new_e->code[i] = val[i];
 	}
+
 	new_e->code[i] = '\0';
-	
-	printf("%c %d %s\n", new_e->value, i, new_e->code);
-	
-	//ht->table[h] = new_e;
-	//printf("%c %d %s\n", ht->table[h]->value, i, ht->table[h]->code);
+	ht->table[h] = new_e;
 }
 
 void print_hash(HashHuff *h)
