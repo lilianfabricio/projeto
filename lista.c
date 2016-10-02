@@ -15,6 +15,7 @@ struct list
 {
 	NodeList* first;
 	NodeList* last;
+	int tam;
 };
 
 List* createlist()
@@ -22,6 +23,7 @@ List* createlist()
 	List *newlist = (List*) malloc(sizeof(List));
 	newlist->first = NULL;
 	newlist->last = NULL;
+	newlist->tam = 0;
 
 	return newlist;
 }
@@ -40,18 +42,22 @@ void insertnode(List* l, unsigned char c)
 		aux->next = l->first;
 		l->first = aux;
 	}
+	l->tam++;
 }
 
-void freelist(List* l)
+int listsize(List* list)
 {
-	NodeList *current, *aux = l->first;
-	while(aux != l->last)
-	{
-		current = aux->next;
-		free(aux);
-		aux = current;
-	}
-	free(aux);
+	return list->tam;
+}
+
+NodeList* removenode(List* l)
+{
+	NodeList* aux;
+	aux = l->first;
+	l->first = aux->next;
+	aux->next = NULL;
+
+	return aux;
 }
 
 #endif /* LISTA_C_ */

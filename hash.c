@@ -45,25 +45,21 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 
 void put(HashHuff *ht, unsigned char key, List* l)
 {
-	int i, count, h;
+	int i, tam, h;
 	NodeList* aux;
 	Element* new_e = (Element*) malloc(sizeof(Element));
 
 	h = key % MAX_HASH;
 	new_e->value = key;
-	aux = l->first;
-
-	for(count = 1; aux != l->last; count++)
-	{
-		aux = aux->next;
-	}
 	new_e->code = (unsigned char*) malloc(count*sizeof(unsigned char));
-	aux = l->first;
 	
-	for(i = 0; i < count && aux != NULL; i++)
+	tam = listsize(l);
+	aux = remove(l);
+	
+	for(i = tam; i > 0 && aux != NULL; i--)
 	{
 		new_e->code[i] = aux->c;
-		aux = aux->next;
+		aux = remove(l);
 	}
 
 	ht->table[h] = new_e;

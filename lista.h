@@ -13,6 +13,8 @@ List* createlist();
 
 void insertnode(List* l, unsigned char c);
 
-void freelist(List* l);
+int listsize(List* list);
+
+NodeList* removenode(List* l);
 
 #endif /* LISTA_H_ */
