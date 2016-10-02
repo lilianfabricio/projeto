@@ -194,7 +194,6 @@ void getcode(HashHuff *h, unsigned char* tree, List* l, unsigned char lado)
 		if(tree[0] == '*')
 		{
 			insertnode(l, lado);
-			
 			getcode(h, tree+1, l, lado);
 		}
 		else

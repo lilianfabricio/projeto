@@ -14,7 +14,6 @@ typedef struct list List;
 struct list
 {
 	NodeList* first;
-	NodeList* last;
 	int tam;
 };
 
@@ -22,7 +21,6 @@ List* createlist()
 {
 	List *newlist = (List*) malloc(sizeof(List));
 	newlist->first = NULL;
-	newlist->last = NULL;
 	newlist->tam = 0;
 
 	return newlist;
@@ -35,7 +33,7 @@ void insertnode(List* l, unsigned char c)
 	if(l->first == NULL)
 	{
 		l->first = aux;
-		l->last = aux;
+		l->first->next = NULL;
 	}
 	else
 	{
@@ -54,8 +52,8 @@ unsigned char removenode(List* l)
 {
 	NodeList* aux;
 	aux = l->first;
-	aux->next = NULL;
 	l->first = aux->next;
+	aux->next = NULL;
 
 	return aux->c;
 }
