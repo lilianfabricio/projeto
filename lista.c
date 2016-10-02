@@ -60,4 +60,14 @@ unsigned char removenode(List* l)
 	return aux->c;
 }
 
+void printlist(List* l)
+{
+	NodeList* aux = l->first;
+	while(aux != NULL)
+	{
+		printf("%c\n", aux->c);
+		aux = aux->next;
+	}
+}
+
 #endif /* LISTA_C_ */

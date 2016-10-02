@@ -76,7 +76,7 @@ int main()
 		fscanf(arq, "%c", &tree[i]);
 	}
 	tree[i] = '\0';
-	funcao(hash, tree, listacod, '0');
+	getcode(hash, tree, listacod, '0');
 
 	print_hash(hash);
 

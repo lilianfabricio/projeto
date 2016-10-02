@@ -187,14 +187,15 @@ int is_leaf(Node *node)
 	return (node->left == NULL && node->right == NULL);
 }
 
-void funcao(HashHuff *h, unsigned char *tree, List *l, unsigned char lado)
+void getcode(HashHuff *h, unsigned char* tree, List* l, unsigned char lado)
 {
 	if(tree[0] != '\0')
 	{
 		if(tree[0] == '*')
 		{
 			insertnode(l, lado);
-			funcao(h, tree+1, l, lado);
+			
+			getcode(h, tree+1, l, lado);
 		}
 		else
 		{
@@ -207,8 +208,8 @@ void funcao(HashHuff *h, unsigned char *tree, List *l, unsigned char lado)
 			{
 				lado = '0';
 			}
-			l = createlist();
-			funcao(h, tree+1, l, lado);
+			unsigned char aux = removenode(l);
+			getcode(h, tree+1, l, lado);
 		}
 	}
 }

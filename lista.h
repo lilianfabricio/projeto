@@ -17,4 +17,6 @@ int listsize(List* list);
 
 unsigned char removenode(List* l);
 
+void printlist(NodeList* node);
+
 #endif /* LISTA_H_ */
