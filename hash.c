@@ -46,13 +46,13 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 void put(HashHuff *ht, unsigned char key, List* l)
 {
 	int i, count, h;
-	NodeList *aux;
-	Element *new_e = (Element*) malloc(sizeof(Element));
+	NodeList* aux;
+	Element* new_e = (Element*) malloc(sizeof(Element));
 
 	h = key % MAX_HASH;
 	new_e->value = key;
 	aux = l->first;
-	
+
 	for(count = 1; aux != l->last; count++)
 	{
 		aux = aux->next;
