@@ -33,7 +33,7 @@ void insertnode(List* l, unsigned char c)
 	if(l->first == NULL)
 	{
 		l->first = aux;
-		l->first->next = NULL;
+		aux->next = NULL;
 	}
 	else
 	{

@@ -198,6 +198,10 @@ void getcode(HashHuff *h, unsigned char* tree, List* l, unsigned char lado)
 		}
 		else
 		{
+			if(tree[0] == 92)
+			{
+				tree = tree + 1;
+			}
 			put(h, *(tree), l);
 			if(lado == '0')
 			{
@@ -208,6 +212,7 @@ void getcode(HashHuff *h, unsigned char* tree, List* l, unsigned char lado)
 				lado = '0';
 			}
 			unsigned char aux = removenode(l);
+			insertnode(l, lado);
 			getcode(h, tree+1, l, lado);
 		}
 	}
