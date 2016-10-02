@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "lista.h"
 
 #define MAX_HASH 256
 #define MAX_CODE 148
@@ -16,7 +17,7 @@ HashHuff* create_hash();
 
 unsigned char* get(HashHuff *ht, unsigned char key);
 
-void put(HashHuff *ht, unsigned char key, unsigned char *val);
+void put(HashHuff *ht, unsigned char key, List* l);
 
 void print_hash(HashHuff *h);
 
