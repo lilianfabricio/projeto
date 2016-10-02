@@ -207,7 +207,6 @@ void funcao(HashHuff *h, unsigned char *tree, List *l, unsigned char lado)
 			{
 				lado = '0';
 			}
-			freelist(l);
 			l = createlist();
 			funcao(h, tree+1, l, lado);
 		}

@@ -54,8 +54,8 @@ unsigned char removenode(List* l)
 {
 	NodeList* aux;
 	aux = l->first;
-	l->first = aux->next;
 	aux->next = NULL;
+	l->first = aux->next;
 
 	return aux->c;
 }
