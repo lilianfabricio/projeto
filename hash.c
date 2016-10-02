@@ -51,8 +51,9 @@ void put(HashHuff *ht, unsigned char key, List* l)
 
 	h = key % MAX_HASH;
 	new_e->value = key;
-
-	for(count = 1, aux = l->first; aux != l->last; count++)
+	aux = l->first;
+	
+	for(count = 1; aux != l->last; count++)
 	{
 		aux = aux->next;
 	}
