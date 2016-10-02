@@ -170,19 +170,13 @@ int is_leaf(Node *node)
 
 void funcao(HashHuff *h, unsigned char *tree, unsigned char *c)
 {
-	int lado = 0, i, j;
+	int lado = 0, i, j, UNN = 0;
 	for(i = 0, j = 0; tree[i] != '\0'; i++)
 	{
 		if(tree[i] == '*')
 		{
-			if(lado == 0)
-			{
-				c[j] = '0';
-			}
-			else
-			{
-				c[j] = '1';
-			}
+			c[j] = '0';
+			UNN = 0;
 			j++;
 		}
 		else
@@ -191,16 +185,21 @@ void funcao(HashHuff *h, unsigned char *tree, unsigned char *c)
 			{
 				i++;
 			}
-			put(h, *(tree+i), (c-j));
-			c[--j] = 'e';
-			if(lado == 0)
+			put(h, *(tree+i), (c));
+			j--;
+			if(lado == 0 && UNN == 0)
 			{
+				c[j] = '1';
 				lado = 1;
 			}
 			else
 			{
+				c[j] = 'e';
+				c[--j] = '1';
 				lado = 0;
 			}
+			UNN = 1;
+			j++;
 		}
 	}
 }
