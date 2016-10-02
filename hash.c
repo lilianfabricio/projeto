@@ -47,7 +47,7 @@ void put(HashHuff *ht, unsigned char key, List* l)
 {
 	int i, count, h;
 	NodeList *aux;
-	Element *new_e = (Element*) malloc(sizeof(Element));
+	Element *new_e = malloc(sizeof(Element));
 
 	h = key % MAX_HASH;
 	new_e->value = key;
