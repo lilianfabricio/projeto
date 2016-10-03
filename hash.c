@@ -55,11 +55,11 @@ void put(HashHuff *ht, unsigned char key, List* l)
 	tam = listsize(l);
 	new_e->code = (char*) malloc(tam*sizeof(char));
 	
-	aux = remove(l);
+	aux = removenode(l);
 	for(i = tam; i > 0; i--)
 	{
 		new_e->code[i] = aux;
-		aux = remove(l);
+		aux = removenode(l);
 	}
 
 	ht->table[h] = new_e;
