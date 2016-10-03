@@ -60,6 +60,7 @@ char* getstring(List* l)
 		string[i] = aux->c;
 		aux = aux->next;
 	}
+	string[tam] = '\0';
 
 	return string;
 }

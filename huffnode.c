@@ -159,7 +159,7 @@ void print_tree_pre_order(Node *root, FILE *arq)
 	{
 		if(root->item == '*' && root->left == NULL && root->right == NULL)
 		{
-			fprintf(arq, "%c%c", 92, 42);
+			fprintf(arq, "%c%c", '\\', '*');
 		}
 		else
 		{
@@ -187,39 +187,22 @@ int is_leaf(Node *node)
 	return (node->left == NULL && node->right == NULL);
 }
 
-void getcode(HashHuff *h, unsigned char* tree, List* l, char lado)
+void getcode(HashHuff *h, Node* tree, List* l)
 {
-	if(tree[0] != '\0')
+	if(tree->left == NULL && tree->right == NULL)
 	{
-		if(tree[0] == '*')
-		{
-			if(lado == '1')
-			{
-				lado = '0';
-			}
-			insertnode(l, lado);
-			getcode(h, tree+1, l, lado);
-		}
-		else
-		{
-			char aux;
-			if(tree[0] == 92)
-			{
-				tree = tree + 1;
-			}
-			put(h, *(tree), l);
-			if(lado == '0')
-			{
-				lado = '1';
-			}
-			else
-			{
-				aux = removenode(l);
-			}
-			aux = removenode(l);
-			insertnode(l, lado);
-			getcode(h, tree+1, l, lado);
-		}
+		put(h, tree->item, l);
+	}
+	else
+	{
+		unsigned char aux;
+		insertnode(l, '0');
+		getcode(h, tree->left, l);
+		aux = removenode(l);
+
+		insertnode(l, '1');
+		getcode(h, tree->right, l);
+		aux = removenode(l);
 	}
 }
 

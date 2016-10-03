@@ -65,7 +65,15 @@ void print_post_order(Huffman_tree *ht)
 
 Huffman_tree* add(Huffman_tree *ht, char *string)
 {
-    if(string[i] == '*')
+     if(string[i] == '\\')
+     {
+        i++;
+        ht = create_tree(string[i], NULL, NULL);
+        printf("%c", string[i]);
+        i++;
+        return ht;
+     }
+    else if(string[i] == '*')
     {
         ht = create_tree(string[i], NULL, NULL);
         i++;
@@ -75,6 +83,8 @@ Huffman_tree* add(Huffman_tree *ht, char *string)
     }
     else
     {
+       
+
         ht = create_tree(string[i], NULL, NULL);
         i++;
  
@@ -129,24 +139,14 @@ void compress()
         }
     }
 
-    arqS = fopen("compressed.huff", "w+");
     root = build_tree(pq);
-    print_tree_pre_order(root, arqS);
-
-    rewind(arqS);
 
     int size = tree_size(root);
-    unsigned char tree[size];
     List* listacod = createlist();
 
-    for(i = 0; i < size; i++)
-    {
-        fscanf(arqS, "%c", &tree[i]);
-    }
-    tree[i] = '\0';
-    getcode(hash, tree, listacod, '0');
+    getcode(hash, root, listacod);
 
-    rewind(arqS);
+    arqS = fopen("compressed.huff", "w+");
     if(size < 255)
     {
         fprintf(arqS, "%c%c", 0, size);
@@ -181,17 +181,14 @@ void compress()
     fprintf(arqS, "%c", nula);
 
     lixo = j;
-    printf("%d\n", lixo);
-    fclose(arqS);
     if(lixo == 0 || lixo == -1)
     {
         fclose(arqS);
     }
     else
     {
-        arqS = fopen("compressed.huff", "r+");
+        rewind(arqS);
         fscanf(arqS, "%c", &aux2);
-        fclose(arqS);
         if(lixo >= 4)
         {
             aux2 = set_bit(aux2, 7);
@@ -215,14 +212,15 @@ void compress()
                 aux2 = set_bit(aux2, 6);
             }
         }
-        printf("%c\n", aux2);
-        arqS = fopen("compressed.huff", "w+");
+        //printf("%c\n", aux2);
+        rewind(arqS);
         fprintf(arqS, "%c", aux2);
 
         fclose(arqS);
     }
 
-    fclose(arqS);
+    printf("Compactado com sucesso\n");
+
     fclose(arqE);
 }
 
@@ -230,7 +228,7 @@ void decompress()
 {
 
     FILE *compressed;
-    unsigned char *buffer, aux1, aux2[2];
+    unsigned char *buffer, aux1, aux2[3];
     size_t result;
     char aux[14];
     int size = 0, coordenadas, trashSize, aux3, aux4, k, z, tamanho_total;
@@ -257,8 +255,8 @@ void decompress()
     size = size + (aux2[1]);
     
     //printf("LIXO: %d TAMANHO ARVORE: %d\n", trashSize, size);  
-    char tree[size]; 
-    fread(&tree, sizeof(char), size, compressed);
+    char tree[size+1]; 
+    fread(&tree, sizeof(char), size+1, compressed);
     i = 0;
     ht = add(ht, tree);
     fseek (compressed, 0, SEEK_END);
@@ -287,7 +285,7 @@ void decompress()
         }
     }
    
-    k = k - trashSize;
+    k = k - trashSize - 1;
     free(buffer);
     free(array_resto);
 
@@ -329,7 +327,7 @@ int main()
             decompress();
             break;
         default:
-            printf("Opção Inválida\n");
+            printf("Opcao Invalida\n");
     }
     return 0;
 }

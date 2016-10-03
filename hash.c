@@ -40,7 +40,7 @@ HashHuff* create_hash()
 
 char* get(HashHuff *ht, unsigned char key)
 {
-	return ht->table[(key % MAX_HASH)]->code;
+	return ht->table[key]->code;
 }
 
 void put(HashHuff *ht, unsigned char key, List* l)
@@ -55,7 +55,6 @@ void put(HashHuff *ht, unsigned char key, List* l)
 	tam = listsize(l);
 	
 	new_e->code = getstring(l);
-	new_e->code[tam] = '\0';
 
 	ht->table[h] = new_e;
 }
