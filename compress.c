@@ -46,7 +46,7 @@ int main()
     }
 	while(!feof(arqE))
 	{
-		fscanf(arqE,"%c", &aux);
+		fscanf(arqE, "%c", &aux);
 		tabela[aux]++;
 	}
 	tabela[aux]--;
@@ -78,7 +78,6 @@ int main()
 	tree[i] = '\0';
 	getcode(hash, tree, listacod, '0');
 
-	rewind(arqE);
 	rewind(arqS);
 	if(size < 255)
 	{
@@ -90,27 +89,30 @@ int main()
 	}
 	print_tree_pre_order(root, arqS);
 
-	while(feof(arqE))
+	rewind(arqE);
+	nula = 0;
+	j = 0;
+	while(!feof(arqE))
 	{
 		fscanf(arqE, "%c", &aux);
 		printf("%c\n", aux);
-		/*code = get(hash, aux);
-		for(nula = 0, i = 0, j = 8; code[i] == '1' || code[i] == '0'; i++, j--)
+		code = get(hash, aux);
+		/*for(i = 0; code[i] == '1' || code[i] == '0'; i++, j++)
 		{
-			if(j == 0)
+			if(j == 8)
 			{
 				fprintf(arqS, "%c", nula);
 				nula = 0;
-				j = 9;
+				j = -1;
 				i--;
 			}
-			else
+			else if(code[i] == '1')
 			{
 				nula = set_bit(nula, j);
 			}
-		}
+		}*/
 	}
-	if(j == 8 || j == 9)
+	/*if(j == 8 || j == 9)
 	{
 		fclose(arqS);
 	}
@@ -128,8 +130,8 @@ int main()
 			}
 		}
 
-		fclose(arqS);*/
-	}
+		fclose(arqS);
+	}*/
 
 	fclose(arqS);
     fclose(arqE);
