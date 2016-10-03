@@ -56,7 +56,7 @@ void put(HashHuff *ht, unsigned char key, List* l)
 	new_e->code = (char*) malloc(tam*sizeof(char));
 	
 	aux = removenode(l);
-	for(i = tam; i > 0; i--)
+	for(i = (tam-1); i >= 0; i--)
 	{
 		new_e->code[i] = aux;
 		aux = removenode(l);
