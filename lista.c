@@ -48,6 +48,22 @@ int listsize(List* list)
 	return list->tam;
 }
 
+char* getstring(List* l)
+{
+	int i, tam;
+	NodeList* aux = l->first;
+
+	tam = listsize(l);
+	char* string = (char*) malloc((tam+1)*sizeof(char));
+	for(i = (tam-1); aux != NULL; i--)
+	{
+		string[i] = aux->c;
+		aux = aux->next;
+	}
+
+	return string;
+}
+
 char removenode(List* l)
 {
 	char c;

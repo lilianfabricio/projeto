@@ -45,7 +45,7 @@ char* get(HashHuff *ht, unsigned char key)
 
 void put(HashHuff *ht, unsigned char key, List* l)
 {
-	int i, tam, h;
+	int tam, h;
 	char aux;
 	Element* new_e = (Element*) malloc(sizeof(Element));
 
@@ -53,19 +53,11 @@ void put(HashHuff *ht, unsigned char key, List* l)
 	new_e->value = key;
 
 	tam = listsize(l);
-	new_e->code = (char*) malloc((tam+1)*sizeof(char));
 	
-	aux = removenode(l);
-	for(i = (tam-1); i >= 0; i--)
-	{
-		new_e->code[i] = aux;
-		aux = removenode(l);
-	}
+	new_e->code = getstring(l);
 	new_e->code[tam] = '\0';
 
 	ht->table[h] = new_e;
-
-	printf("%c %s", ht->table[h]->value, ht->table[h]->code);
 }
 
 void print_hash(HashHuff *h)

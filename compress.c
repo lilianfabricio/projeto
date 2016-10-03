@@ -25,7 +25,7 @@ int set_bit(unsigned char c, int i)
 
 int main()
 {
-	FILE *arqE, *arqS, *arq;
+	FILE *arqE, *arqS;
 	unsigned char aux, nula, lixo;
 	unsigned char *code;
 	int tabela[MAX], i = 0, j;
@@ -61,11 +61,11 @@ int main()
 		}
 	}
 
-	arq = fopen("compressed.txt", "w+");
+	arqS = fopen("compressed.huff", "w+");
 	root = build_tree(pq);
-	print_tree_pre_order(root, arq);
+	print_tree_pre_order(root, arqS);
 
-	rewind(arq);
+	rewind(arqS);
 
 	int size = tree_size(root);
 	unsigned char tree[size];
@@ -73,29 +73,28 @@ int main()
 
 	for(i = 0; i < size; i++)
 	{
-		fscanf(arq, "%c", &tree[i]);
+		fscanf(arqS, "%c", &tree[i]);
 	}
 	tree[i] = '\0';
 	getcode(hash, tree, listacod, '0');
 
-	print_hash(hash);
-
-	/*rewind(arqE);
-	arqS = fopen("compressed.huff", "w+");
+	rewind(arqE);
+	rewind(arqS);
 	if(size < 255)
 	{
-		fprintf(arqS, "%c%c", 0, 255);
+		fprintf(arqS, "%c%c", 0, size);
 	}
 	else
 	{
-		fprintf(arqS, "%c%c", (size - 255), 255);
+		fprintf(arqS, "%c%c", (size - 255), size);
 	}
 	print_tree_pre_order(root, arqS);
 
 	while(feof(arqE))
 	{
 		fscanf(arqE, "%c", &aux);
-		code = get(hash, aux);
+		printf("%c\n", aux);
+		/*code = get(hash, aux);
 		for(nula = 0, i = 0, j = 8; code[i] == '1' || code[i] == '0'; i++, j--)
 		{
 			if(j == 0)
@@ -129,9 +128,10 @@ int main()
 			}
 		}
 
-		fclose(arqS);
-	}*/
-	fclose(arq);
+		fclose(arqS);*/
+	}
+
+	fclose(arqS);
     fclose(arqE);
 
 	return 0;

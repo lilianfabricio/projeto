@@ -15,6 +15,8 @@ void insertnode(List* l, char c);
 
 int listsize(List* list);
 
+char* getstring(List* l);
+
 char removenode(List* l);
 
 void printlist(List* l);
