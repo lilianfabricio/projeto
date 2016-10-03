@@ -179,6 +179,8 @@ void compress()
         }
     }
     fprintf(arqS, "%c", nula);
+
+    lixo = j;
     if(j == 0 || j == -1)
     {
         fclose(arqS);
@@ -188,7 +190,6 @@ void compress()
         rewind(arqS);
         fscanf(arqS, "%c", &aux2);
 
-        lixo = 7 - j;
         if(lixo >= 4)
         {
             if(is_bit_i_set(aux2, 7))
