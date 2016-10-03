@@ -22,7 +22,7 @@ typedef struct hash HashHuff;
 
 HashHuff* create_hash();
 
-unsigned char* get(HashHuff *ht, unsigned char key);
+char* get(HashHuff *ht, unsigned char key);
 
 void put(HashHuff *ht, unsigned char key, List* l);
 
