@@ -80,7 +80,7 @@ Huffman_tree* add(Huffman_tree *ht, char *string)
     return ht;
 }
 
-int main () 
+void decompresss() 
 {
 
     //Criar um arquivo formato FILE que vai receber o arquivo comprimido
@@ -247,4 +247,9 @@ int main ()
     //Fechamos o arquivo comprimido aqui
     fclose (compressed);
     
+}
+int main()
+{
+    printf("DESSA VEZ VAI\n");
+    decompresss();
 }
