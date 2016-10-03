@@ -17,7 +17,7 @@
 typedef struct element
 {
 	unsigned char value;
-	unsigned char* code;
+	char* code;
 }Element;
 
 typedef struct hash
@@ -38,7 +38,7 @@ HashHuff* create_hash()
 	return ht;
 }
 
-unsigned char* get(HashHuff *ht, unsigned char key)
+char* get(HashHuff *ht, unsigned char key)
 {
 	return ht->table[(key % MAX_HASH)]->code;
 }
@@ -46,17 +46,17 @@ unsigned char* get(HashHuff *ht, unsigned char key)
 void put(HashHuff *ht, unsigned char key, List* l)
 {
 	int i, tam, h;
-	unsigned char aux;
+	char aux;
 	Element* new_e = (Element*) malloc(sizeof(Element));
 
 	h = key % MAX_HASH;
 	new_e->value = key;
 
 	tam = listsize(l);
-	new_e->code = (unsigned char*) malloc(tam*sizeof(unsigned char));
+	new_e->code = (char*) malloc(tam*sizeof(char));
 	
 	aux = remove(l);
-	for(i = tam; i > 0 && aux != NULL; i--)
+	for(i = tam; i > 0; i--)
 	{
 		new_e->code[i] = aux;
 		aux = remove(l);

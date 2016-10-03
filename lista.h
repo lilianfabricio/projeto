@@ -11,11 +11,11 @@ typedef struct list List;
 
 List* createlist();
 
-void insertnode(List* l, unsigned char c);
+void insertnode(List* l, char c);
 
 int listsize(List* list);
 
-unsigned char removenode(List* l);
+char removenode(List* l);
 
 void printlist(List* l);
 

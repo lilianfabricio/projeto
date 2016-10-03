@@ -6,7 +6,7 @@
 typedef struct node_list NodeList;
 struct node_list
 {
-	unsigned char c;
+	char c;
 	NodeList* next;
 };
 
@@ -26,7 +26,7 @@ List* createlist()
 	return newlist;
 }
 
-void insertnode(List* l, unsigned char c)
+void insertnode(List* l, char c)
 {
 	NodeList* aux = (NodeList*) malloc(sizeof(NodeList));
 	aux->c = c;
@@ -48,7 +48,7 @@ int listsize(List* list)
 	return list->tam;
 }
 
-unsigned char removenode(List* l)
+char removenode(List* l)
 {
 	NodeList* aux;
 	aux = l->first;

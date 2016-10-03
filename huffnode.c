@@ -187,7 +187,7 @@ int is_leaf(Node *node)
 	return (node->left == NULL && node->right == NULL);
 }
 
-void getcode(HashHuff *h, unsigned char* tree, List* l, unsigned char lado)
+void getcode(HashHuff *h, unsigned char* tree, List* l, char lado)
 {
 	if(tree[0] != '\0')
 	{
@@ -202,7 +202,7 @@ void getcode(HashHuff *h, unsigned char* tree, List* l, unsigned char lado)
 		}
 		else
 		{
-			unsigned char aux;
+			char aux;
 			if(tree[0] == 92)
 			{
 				tree = tree + 1;
