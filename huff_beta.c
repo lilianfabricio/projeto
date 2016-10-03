@@ -65,7 +65,7 @@ void print_post_order(Huffman_tree *ht)
 
 Huffman_tree* add(Huffman_tree *ht, char *string)
 {
-     if(string[i] == '\\')
+     if(string[i] == '\\' && string[i+1] == '*')
      {
         i++;
         ht = create_tree(string[i], NULL, NULL);
@@ -256,6 +256,7 @@ void decompress()
     
     //printf("LIXO: %d TAMANHO ARVORE: %d\n", trashSize, size);  
     char tree[size+1]; 
+    tree[size+1] = '\0';
     fread(&tree, sizeof(char), size+1, compressed);
     i = 0;
     ht = add(ht, tree);

@@ -176,6 +176,9 @@ int tree_size(Node *root)
 	{
 		return 0;
 	}
+	else if(root->item == '*'&& is_leaf(root)){
+		return 2;
+	}
 	else
 	{
 		return (1 + tree_size(root->left) + tree_size(root->right));
