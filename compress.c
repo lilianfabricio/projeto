@@ -26,7 +26,8 @@ int set_bit(unsigned char c, int i)
 int main()
 {
 	FILE *arqE, *arqS;
-	unsigned char aux, nula, lixo;
+	char aux;
+	unsigned char nula, lixo;
 	unsigned char *code;
 	int tabela[MAX], i = 0, j;
 	Node *root = NULL;
@@ -92,12 +93,10 @@ int main()
 	rewind(arqE);
 	nula = 0;
 	j = 0;
-	while(!feof(arqE))
+	while((aux = fgetc(arqE)) != EOF)
 	{
-		fscanf(arqE, "%c", &aux);
-		printf("%c\n", aux);
 		code = get(hash, aux);
-		/*for(i = 0; code[i] == '1' || code[i] == '0'; i++, j++)
+		for(i = 0; code[i] == '1' || code[i] == '0'; i++, j++)
 		{
 			if(j == 8)
 			{
@@ -110,9 +109,9 @@ int main()
 			{
 				nula = set_bit(nula, j);
 			}
-		}*/
+		}
 	}
-	/*if(j == 8 || j == 9)
+	if(j == 8 || j == 9)
 	{
 		fclose(arqS);
 	}
@@ -131,7 +130,7 @@ int main()
 		}
 
 		fclose(arqS);
-	}*/
+	}
 
 	fclose(arqS);
     fclose(arqE);
