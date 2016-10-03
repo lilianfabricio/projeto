@@ -27,7 +27,7 @@ int main()
 {
 	FILE *arqE, *arqS;
 	char aux;
-	unsigned char nula, lixo;
+	unsigned char aux2, nula, lixo;
 	unsigned char *code;
 	int tabela[MAX], i = 0, j;
 	Node *root = NULL;
@@ -92,17 +92,17 @@ int main()
 
 	rewind(arqE);
 	nula = 0;
-	j = 0;
+	j = 7;
 	while((aux = fgetc(arqE)) != EOF)
 	{
 		code = get(hash, aux);
-		for(i = 0; code[i] == '1' || code[i] == '0'; i++, j++)
+		for(i = 0; code[i] == '1' || code[i] == '0'; i++, j--)
 		{
-			if(j == 8)
+			if(j == -1)
 			{
 				fprintf(arqS, "%c", nula);
 				nula = 0;
-				j = -1;
+				j = 8;
 				i--;
 			}
 			else if(code[i] == '1')
@@ -111,23 +111,25 @@ int main()
 			}
 		}
 	}
-	if(j == 8 || j == 9)
+	if(j == 0 || j == -1)
 	{
 		fclose(arqS);
 	}
 	else
 	{
 		rewind(arqS);
-		fscanf(arqS, "%c", &aux);
+		fscanf(arqS, "%c", &aux2);
 
-		lixo = 8 - j;
-		for(i = 0, j = 6; i <= 2; i++, j++)
+		lixo = 8 - (j+1);
+		for(i = 0, j = 5; i <= 2; i++, j++)
 		{
 			if(is_bit_i_set(lixo, i))
 			{
-				set_bit(aux, j);
+				set_bit(aux2, j);
 			}
 		}
+		rewind(arqS);
+		fprintf(arqS, "%c", aux2);
 
 		fclose(arqS);
 	}
