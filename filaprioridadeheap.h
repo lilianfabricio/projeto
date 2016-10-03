@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define max_heap_size 200
+#define max_heap_size 20000
 
 typedef struct heap Heap;
 
