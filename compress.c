@@ -27,7 +27,8 @@ int main()
 {
 	FILE *arqE, *arqS;
 	char aux;
-	unsigned char aux2, nula, lixo;
+	unsigned char aux2, nula;
+	int lixo;
 	unsigned char *code;
 	int tabela[MAX], i = 0, j;
 	Node *root = NULL;
@@ -111,6 +112,7 @@ int main()
 			}
 		}
 	}
+	//fprintf(arqS, "%c", nula);
 	if(j == 0 || j == -1)
 	{
 		fclose(arqS);
@@ -120,12 +122,43 @@ int main()
 		rewind(arqS);
 		fscanf(arqS, "%c", &aux2);
 
-		lixo = 8 - (j+1);
-		for(i = 0, j = 5; i <= 2; i++, j++)
+		lixo = 7 - j;
+		if(lixo >= 4)
 		{
-			if(is_bit_i_set(lixo, i))
+			if(is_bit_i_set(aux2, 7))
 			{
-				set_bit(aux2, j);
+				set_bit(aux2, 7);
+			}
+			if((lixo % 2) != 0)
+			{
+				if(is_bit_i_set(aux2, 5))
+				{
+					set_bit(aux2, 5);
+				}
+			}
+			if(lixo  == 6 || lixo == 7)
+			{
+				if(is_bit_i_set(aux2, 6))
+				{
+					set_bit(aux2, 6);
+				}
+			}
+		}
+		else
+		{
+			if(lixo == 1 || lixo == 3)
+			{
+				if(is_bit_i_set(aux2, 5))
+				{
+					set_bit(aux2, 5);
+				}
+			}
+			if(lixo == 3 || lixo == 2)
+			{
+				if(is_bit_i_set(aux2, 6))
+				{
+					set_bit(aux2, 6);
+				}
 			}
 		}
 		rewind(arqS);
