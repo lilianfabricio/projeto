@@ -50,14 +50,21 @@ int listsize(List* list)
 
 char removenode(List* l)
 {
-	NodeList* aux;
 	char c;
+	if(l->first != NULL)
+	{
+		NodeList* aux;
 
-	aux = l->first;
-	l->first = aux->next;
-	c = aux->c;
+		aux = l->first;
+		l->first = aux->next;
+		c = aux->c;
 
-	free(aux);
+		free(aux);
+	}
+	else
+	{
+		c = 'e';
+	}
 
 	return c;
 }
