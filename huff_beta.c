@@ -83,7 +83,7 @@ Huffman_tree* add(Huffman_tree *ht, char *string)
     return ht;
 }
 
-int set_bit(unsigned char c, int i)
+unsigned char set_bit(unsigned char c, int i)
 {
     unsigned char mask = 1 << i;
     return mask | c;
@@ -153,7 +153,7 @@ void compress()
     }
     else
     {
-        fprintf(arqS, "%c%c", (size - 255), size);
+        fprintf(arqS, "%c%c", (size - 255), 255);
     }
     print_tree_pre_order(root, arqS);
 
@@ -181,54 +181,42 @@ void compress()
     fprintf(arqS, "%c", nula);
 
     lixo = j;
-    if(j == 0 || j == -1)
+    printf("%d\n", lixo);
+    fclose(arqS);
+    if(lixo == 0 || lixo == -1)
     {
         fclose(arqS);
     }
     else
     {
-        rewind(arqS);
+        arqS = fopen("compressed.huff", "r+");
         fscanf(arqS, "%c", &aux2);
-
+        fclose(arqS);
         if(lixo >= 4)
         {
-            if(is_bit_i_set(aux2, 7))
-            {
-                set_bit(aux2, 7);
-            }
+            aux2 = set_bit(aux2, 7);
             if((lixo % 2) != 0)
             {
-                if(is_bit_i_set(aux2, 5))
-                {
-                    set_bit(aux2, 5);
-                }
+                aux2 = set_bit(aux2, 5);
             }
             if(lixo  == 6 || lixo == 7)
             {
-                if(is_bit_i_set(aux2, 6))
-                {
-                    set_bit(aux2, 6);
-                }
+                aux2 = set_bit(aux2, 6);
             }
         }
         else
         {
             if(lixo == 1 || lixo == 3)
             {
-                if(is_bit_i_set(aux2, 5))
-                {
-                    set_bit(aux2, 5);
-                }
+                aux2 = set_bit(aux2, 5);
             }
             if(lixo == 3 || lixo == 2)
             {
-                if(is_bit_i_set(aux2, 6))
-                {
-                    set_bit(aux2, 6);
-                }
+                aux2 = set_bit(aux2, 6);
             }
         }
-        rewind(arqS);
+        printf("%c\n", aux2);
+        arqS = fopen("compressed.huff", "w+");
         fprintf(arqS, "%c", aux2);
 
         fclose(arqS);
