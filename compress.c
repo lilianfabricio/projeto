@@ -112,7 +112,7 @@ int main()
 			}
 		}
 	}
-	//fprintf(arqS, "%c", nula);
+	fprintf(arqS, "%c", nula);
 	if(j == 0 || j == -1)
 	{
 		fclose(arqS);
