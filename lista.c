@@ -57,9 +57,10 @@ char removenode(List* l)
 
 		aux = l->first;
 		l->first = aux->next;
+		aux->next = NULL;
 		c = aux->c;
 		l->tam--;
-		
+
 		free(aux);
 	}
 	else
