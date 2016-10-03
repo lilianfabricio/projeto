@@ -53,7 +53,7 @@ void put(HashHuff *ht, unsigned char key, List* l)
 	new_e->value = key;
 
 	tam = listsize(l);
-	new_e->code = (char*) malloc(tam*sizeof(char));
+	new_e->code = (char*) malloc((tam+1)*sizeof(char));
 	
 	aux = removenode(l);
 	for(i = (tam-1); i >= 0; i--)
@@ -61,6 +61,7 @@ void put(HashHuff *ht, unsigned char key, List* l)
 		new_e->code[i] = aux;
 		aux = removenode(l);
 	}
+	new_e->code[tam] = '\0';
 
 	ht->table[h] = new_e;
 
