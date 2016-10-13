@@ -231,7 +231,7 @@ void decompress()
     unsigned char *buffer, aux1, aux2[3];
     size_t result;
     char aux[14];
-    int size = 0, coordenadas, trashSize, aux3, aux4, k, z, tamanho_total;
+    int size = 0, coordenadas, trashSize, aux3, aux4, k, z, tamanho_total, nome_ext, tamanho_senha;
     Huffman_tree *ht = create_empty();
     compressed = fopen ("compressed.huff", "rb");
     if (compressed == NULL) 
@@ -254,24 +254,95 @@ void decompress()
     }
     size = size + (aux2[1]);
     
-    //printf("LIXO: %d TAMANHO ARVORE: %d\n", trashSize, size);  
+    printf("LIXO: %d TAMANHO ARVORE: %d\n", trashSize, size);  
+
     char tree[size+1]; 
     tree[size+1] = '\0';
     fread(&tree, sizeof(char), size+1, compressed);
+    //Adiciona na arvore
     i = 0;
     ht = add(ht, tree);
+    printf("TREE: %s\n", tree);
+
+
     fseek (compressed, 0, SEEK_END);
+
     tamanho_total = ftell(compressed);
+
     rewind(compressed);
-    coordenadas = tamanho_total - (2 + size);
-    unsigned char *array_resto;
-    array_resto = (unsigned char*) malloc (sizeof(unsigned char)*coordenadas);
+
     buffer = (unsigned char*) malloc (sizeof(unsigned char)*tamanho_total);
+
     fread (buffer, 1, tamanho_total, compressed);
-    for(int r = 0, o = (2 + size); r < coordenadas; r++, o++)
+    
+    aux1 = buffer[2 + size];
+
+    nome_ext = aux1 >> 5;
+
+    if(nome_ext > 6)
+    {
+        printf("Não é possivel decompactar o arquivo informado.\n");
+        exit(2);
+    }
+
+    aux1 = buffer[2 + size];
+
+    aux1 = aux1 << 3;
+
+    tamanho_senha = aux1 >> 3;
+
+    //SENHAAAAAAAAAAAAAAAA!!!!!!!
+    
+    char extensao[nome_ext];
+
+    int r, y;
+
+    for(r = 0, y = (3 + size); r < nome_ext; r++, y++)
+    {
+        extensao[r] = buffer[y];
+    }
+    extensao[r] = '\0';
+    y = 3 + size + nome_ext;
+
+    printf("EXTENSAO: %s\n", extensao);
+
+    int tamanho_nome_arquivo, p;
+    tamanho_nome_arquivo = buffer[y];
+    printf("TAMANHO DO NOME: %d\n", tamanho_nome_arquivo);
+    y = y + 1;
+    char nome_arquivo[tamanho_nome_arquivo];
+
+    for(r = y, p = 0; p < tamanho_nome_arquivo; r++, y++, p++)
+    {
+        nome_arquivo[p] = buffer[y];
+    }
+    nome_arquivo[p] = '\0';
+    printf("NOME ARQUIVO: %s\n", nome_arquivo);
+
+   
+    coordenadas = tamanho_total - (3 + size + nome_ext + tamanho_senha);
+    unsigned char *array_resto;
+    array_resto = (unsigned char*) malloc (sizeof(unsigned char)*coordenadas); 
+
+    for(int r = 0, o = (3 + size + nome_ext); r < coordenadas; r++, o++)
     {
         array_resto[r] = buffer[o];
     }
+
+    printf("TAMANHO EXTENSAO: %d, TAMANHO TOTAL: %d, COORDENADAS: %d, TAMANHO SENHA: %d\n", nome_ext, tamanho_total, coordenadas, tamanho_senha);
+    
+
+
+
+
+   
+
+
+
+
+
+
+   
 
     int binario[coordenadas * 8];
     unsigned char a;
@@ -289,9 +360,17 @@ void decompress()
     k = k - trashSize - 1;
     free(buffer);
     free(array_resto);
+    char teste[100] = "LEONY";
+    teste[5] = '.';
+    int mm, kk;
+    for(mm = 6, kk = 0; kk < 4; kk++, mm++)
+    {
+        teste[mm] = extensao[kk];
+    }
+    teste[mm] = '\0';
 
     Huffman_tree *auxt = ht;
-    FILE *arq = fopen("decompressed.txt", "wt");
+    FILE *arq = fopen(teste, "wt");
 
     for(i = 0; i < k ; i++)
     {
