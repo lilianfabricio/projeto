@@ -102,20 +102,21 @@ unsigned char set_bit(unsigned char c, int i)
 void compress()
 {
     FILE *arqE, *arqS;
-    char aux;
+    unsigned char aux;
     unsigned char aux2, nula;
     int lixo;
     unsigned char *code;
     int tabela[MAX], i = 0, j;
     Node *root = NULL;
     HashHuff *hash = create_hash();
+    printf("Foi aqui 1\n");
 
-    arqE = fopen("entrada.txt", "r");
+    arqE = fopen("entrada.m4a", "rb");
     for (i = 0; i < MAX; i++)
     {
         tabela[i] = 0;
     }
-
+    printf("Foi aqui 2\n");
     if(arqE == NULL)
     {
         printf("Erro na abertura do arquivo.\n");
@@ -128,6 +129,7 @@ void compress()
         tabela[aux]++;
     }
     tabela[aux]--;
+    printf("Foi aqui 3\n");
 
     Priority_Queue *pq = create_priority_queue();
     for( i = 0; i < MAX; i++)
@@ -138,7 +140,7 @@ void compress()
             enqueue_sorted(pq, new_node);
         }
     }
-
+    printf("Foi aqui 4\n");
     root = build_tree(pq);
 
     int size = tree_size(root);
@@ -146,7 +148,7 @@ void compress()
 
     getcode(hash, root, listacod);
 
-    arqS = fopen("compressed.huff", "w+");
+    arqS = fopen("compressed.huff", "wb+");
     if(size < 255)
     {
         fprintf(arqS, "%c%c", 0, size);
@@ -155,11 +157,14 @@ void compress()
     {
         fprintf(arqS, "%c%c", (size - 255), 255);
     }
+    printf("Foi aqui 5\n");
     print_tree_pre_order(root, arqS);
 
     rewind(arqE);
+    printf("Foi aqui 6\n");
     nula = 0;
     j = 7;
+
     while((aux = fgetc(arqE)) != EOF)
     {
         code = get(hash, aux);
@@ -178,6 +183,7 @@ void compress()
             }
         }
     }
+    printf("Foi aqui 7\n");
     fprintf(arqS, "%c", nula);
 
     lixo = j;
@@ -188,6 +194,7 @@ void compress()
     else
     {
         rewind(arqS);
+        printf("Foi aqui 8\n");
         fscanf(arqS, "%c", &aux2);
         if(lixo >= 4)
         {
@@ -214,6 +221,7 @@ void compress()
         }
         //printf("%c\n", aux2);
         rewind(arqS);
+        printf("Foi aqui 9\n");
         fprintf(arqS, "%c", aux2);
 
         fclose(arqS);
@@ -320,34 +328,22 @@ void decompress()
     printf("NOME ARQUIVO: %s\n", nome_arquivo);
 
    
-    coordenadas = tamanho_total - (3 + size + nome_ext + tamanho_senha);
+    coordenadas = tamanho_total - (4 + size + nome_ext + tamanho_senha + tamanho_nome_arquivo);
+
     unsigned char *array_resto;
+
     array_resto = (unsigned char*) malloc (sizeof(unsigned char)*coordenadas); 
 
-    for(int r = 0, o = (3 + size + nome_ext); r < coordenadas; r++, o++)
+    for(int r = 0, o = (4 + size + nome_ext + tamanho_senha + tamanho_nome_arquivo); r < coordenadas; r++, o++)
     {
         array_resto[r] = buffer[o];
     }
-
     printf("TAMANHO EXTENSAO: %d, TAMANHO TOTAL: %d, COORDENADAS: %d, TAMANHO SENHA: %d\n", nome_ext, tamanho_total, coordenadas, tamanho_senha);
-    
-
-
-
-
-   
-
-
-
-
-
-
-   
-
     int binario[coordenadas * 8];
     unsigned char a;
     k = 0;
 
+    //MUDAR ISSO
     for(i = 0; i < coordenadas; i++)
     {
         a = array_resto[i];
@@ -360,17 +356,30 @@ void decompress()
     k = k - trashSize - 1;
     free(buffer);
     free(array_resto);
-    char teste[100] = "LEONY";
-    teste[5] = '.';
-    int mm, kk;
-    for(mm = 6, kk = 0; kk < 4; kk++, mm++)
+
+    char nome_final[tamanho_nome_arquivo + nome_ext];
+    int ui;
+
+    for(y = 0, ui = 0; y < tamanho_nome_arquivo; y++, ui++)
     {
-        teste[mm] = extensao[kk];
+        nome_final[y] = nome_arquivo[ui];
     }
-    teste[mm] = '\0';
+    printf("Y: %d\n", y);
+    
+    
+    nome_final[y] = '.';
+    y++;
+
+    for(y, ui = 0; ui < nome_ext; y++, ui++)
+    {
+        nome_final[y] = extensao[ui];
+    }
+    nome_final[y] = '\0';
+    printf("NOME FINAL: %s\n", nome_final);
+
 
     Huffman_tree *auxt = ht;
-    FILE *arq = fopen(teste, "wt");
+    FILE *arq = fopen(nome_final, "wt");
 
     for(i = 0; i < k ; i++)
     {
