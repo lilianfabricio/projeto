@@ -102,21 +102,20 @@ unsigned char set_bit(unsigned char c, int i)
 void compress()
 {
     FILE *arqE, *arqS;
-    unsigned char aux;
+    char aux;
     unsigned char aux2, nula;
     int lixo;
     unsigned char *code;
     int tabela[MAX], i = 0, j;
     Node *root = NULL;
     HashHuff *hash = create_hash();
-    printf("Foi aqui 1\n");
 
-    arqE = fopen("entrada.m4a", "rb");
+    arqE = fopen("entrada.txt", "r");
     for (i = 0; i < MAX; i++)
     {
         tabela[i] = 0;
     }
-    printf("Foi aqui 2\n");
+
     if(arqE == NULL)
     {
         printf("Erro na abertura do arquivo.\n");
@@ -129,7 +128,6 @@ void compress()
         tabela[aux]++;
     }
     tabela[aux]--;
-    printf("Foi aqui 3\n");
 
     Priority_Queue *pq = create_priority_queue();
     for( i = 0; i < MAX; i++)
@@ -140,7 +138,7 @@ void compress()
             enqueue_sorted(pq, new_node);
         }
     }
-    printf("Foi aqui 4\n");
+
     root = build_tree(pq);
 
     int size = tree_size(root);
@@ -148,7 +146,7 @@ void compress()
 
     getcode(hash, root, listacod);
 
-    arqS = fopen("compressed.huff", "wb+");
+    arqS = fopen("compressed.huff", "w+");
     if(size < 255)
     {
         fprintf(arqS, "%c%c", 0, size);
@@ -157,14 +155,11 @@ void compress()
     {
         fprintf(arqS, "%c%c", (size - 255), 255);
     }
-    printf("Foi aqui 5\n");
     print_tree_pre_order(root, arqS);
 
     rewind(arqE);
-    printf("Foi aqui 6\n");
     nula = 0;
     j = 7;
-
     while((aux = fgetc(arqE)) != EOF)
     {
         code = get(hash, aux);
@@ -183,7 +178,6 @@ void compress()
             }
         }
     }
-    printf("Foi aqui 7\n");
     fprintf(arqS, "%c", nula);
 
     lixo = j;
@@ -194,7 +188,6 @@ void compress()
     else
     {
         rewind(arqS);
-        printf("Foi aqui 8\n");
         fscanf(arqS, "%c", &aux2);
         if(lixo >= 4)
         {
@@ -221,7 +214,6 @@ void compress()
         }
         //printf("%c\n", aux2);
         rewind(arqS);
-        printf("Foi aqui 9\n");
         fprintf(arqS, "%c", aux2);
 
         fclose(arqS);
@@ -239,19 +231,26 @@ void decompress()
     unsigned char *buffer, aux1, aux2[3];
     size_t result;
     char aux[14];
-    int size = 0, coordenadas, trashSize, aux3, aux4, k, z, tamanho_total, nome_ext, tamanho_senha;
+    int size = 0, coordenadas, trashSize, aux3, aux4, k, z, tamanho_total, tam_nome_ext, tamanho_senha, r, y, p;
+    //Criamos uma arvore huffman vazia
     Huffman_tree *ht = create_empty();
+
     compressed = fopen ("compressed.huff", "rb");
     if (compressed == NULL) 
     {
         printf("Não tem arquivo pra ser extraido!\n");
         exit (1);
     }
-    fread (&aux1, sizeof(unsigned char), 1, compressed);    
-    aux1 = aux1 >> 5;
-    trashSize = aux1;
-    rewind (compressed);
 
+    //Aqui foi lido o primeiro byte
+    fread (&aux1, sizeof(unsigned char), 1, compressed);
+
+    aux1 = aux1 >> 5;
+    //Pegamos o tamanho do lixo, "setando" 5 bits para a direita
+    trashSize = aux1;
+    //O arquivo volta para o início
+    rewind (compressed);
+    //Lemos os dois proximos bytes, pra pegarmos o tamanho da arvore
     fread (&aux2, sizeof(unsigned char), 2, compressed);
     for(int u = 8, h = 0; h < 5; h++, u++)
     {
@@ -260,90 +259,96 @@ void decompress()
             size = size + pow(2, u);
         }
     }
-    size = size + (aux2[1]);
+        size = size + (aux2[1]);
     
     printf("LIXO: %d TAMANHO ARVORE: %d\n", trashSize, size);  
 
     char tree[size+1]; 
     tree[size+1] = '\0';
     fread(&tree, sizeof(char), size+1, compressed);
-    //Adiciona na arvore
     i = 0;
     ht = add(ht, tree);
     printf("TREE: %s\n", tree);
 
 
     fseek (compressed, 0, SEEK_END);
-
     tamanho_total = ftell(compressed);
-
     rewind(compressed);
-
     buffer = (unsigned char*) malloc (sizeof(unsigned char)*tamanho_total);
-
     fread (buffer, 1, tamanho_total, compressed);
-    
+
     aux1 = buffer[2 + size];
 
-    nome_ext = aux1 >> 5;
-
-    if(nome_ext > 6)
+    tam_nome_ext = aux1 >> 5;
+    //Essa parte deve aparecer na interface grafica
+    if(tam_nome_ext > 6)
     {
         printf("Não é possivel decompactar o arquivo informado.\n");
         exit(2);
     }
 
-    aux1 = buffer[2 + size];
 
-    aux1 = aux1 << 3;
-
-    tamanho_senha = aux1 >> 3;
-
+    //*******************************************************************
+    tamanho_senha = 32;
+    //*******************************************************************
     //SENHAAAAAAAAAAAAAAAA!!!!!!!
     
-    char extensao[nome_ext];
 
-    int r, y;
+    char extensao[tam_nome_ext], senha[33];
 
-    for(r = 0, y = (3 + size); r < nome_ext; r++, y++)
+    //Aqui pegamos qual é a extensão do arquivo
+    for(r = 0, y = (3 + size); r < tam_nome_ext; r++, y++)
     {
         extensao[r] = buffer[y];
     }
     extensao[r] = '\0';
-    y = 3 + size + nome_ext;
-
     printf("EXTENSAO: %s\n", extensao);
 
-    int tamanho_nome_arquivo, p;
-    tamanho_nome_arquivo = buffer[y];
-    printf("TAMANHO DO NOME: %d\n", tamanho_nome_arquivo);
-    y = y + 1;
-    char nome_arquivo[tamanho_nome_arquivo];
+    //Pegando a senha:
 
-    for(r = y, p = 0; p < tamanho_nome_arquivo; r++, y++, p++)
+    for(r = 0, y = (3 + size + tam_nome_ext); r < 32; r++, y++)
+    {
+        
+        senha[r] = buffer[y];
+    }
+    senha[r] = '\0';
+    printf("SENHA: %s\n", senha);
+    
+    //Y é onde esta localizado o byte (no buffer) que possui o tamanho do nome do arquivo.
+    y = 35 + size + tam_nome_ext;
+    int tam_nome_arq = buffer[y];    
+    printf("TAMANHO DO NOME: %d\n", tam_nome_arq);
+    y++;
+
+    //Aqui pegamos o nome do arquivo original
+    char nome_arquivo[tam_nome_arq];
+    for(r = y, p = 0; p < tam_nome_arq; r++, y++, p++)
     {
         nome_arquivo[p] = buffer[y];
     }
     nome_arquivo[p] = '\0';
     printf("NOME ARQUIVO: %s\n", nome_arquivo);
 
-   
-    coordenadas = tamanho_total - (4 + size + nome_ext + tamanho_senha + tamanho_nome_arquivo);
+    //Aqui pegamos as coordenadas da descompressao.
+    //36 = 2 bytes (lixo + tamanho arvore) + arvore + tamanho do nome da ext + tamanho do nome.    
+    coordenadas = tamanho_total - (36 + size + tam_nome_ext + tam_nome_arq);
 
     unsigned char *array_resto;
 
     array_resto = (unsigned char*) malloc (sizeof(unsigned char)*coordenadas); 
 
-    for(int r = 0, o = (4 + size + nome_ext + tamanho_senha + tamanho_nome_arquivo); r < coordenadas; r++, o++)
+    for(int r = 0, o = (4 + size + tam_nome_ext + tamanho_senha + tam_nome_arq); r < coordenadas; r++, o++)
     {
         array_resto[r] = buffer[o];
     }
-    printf("TAMANHO EXTENSAO: %d, TAMANHO TOTAL: %d, COORDENADAS: %d, TAMANHO SENHA: %d\n", nome_ext, tamanho_total, coordenadas, tamanho_senha);
+    printf("TAMANHO EXTENSAO: %d, TAMANHO TOTAL: %d, COORDENADAS: %d, TAMANHO SENHA: %d\n", tam_nome_ext, tamanho_total, coordenadas, tamanho_senha);
+    
+    //Aqui é o mesmo de antes 
     int binario[coordenadas * 8];
     unsigned char a;
     k = 0;
 
-    //MUDAR ISSO
+    //MUDAR ISSOOOOOOOO
     for(i = 0; i < coordenadas; i++)
     {
         a = array_resto[i];
@@ -352,33 +357,30 @@ void decompress()
             binario[k] = !!((a << z) & 0x80);
         }
     }
-   
     k = k - trashSize - 1;
     free(buffer);
     free(array_resto);
-
-    char nome_final[tamanho_nome_arquivo + nome_ext];
-    int ui;
-
-    for(y = 0, ui = 0; y < tamanho_nome_arquivo; y++, ui++)
+    //Aqui juntamos o nome do arquivo original + a extensao original
+    char nome_final[tam_nome_arq + tam_nome_ext];
+    //Primeiro é o nome do arquivo original
+    for(y = 0, p = 0; y < tam_nome_arq; y++, p++)
     {
-        nome_final[y] = nome_arquivo[ui];
+        nome_final[y] = nome_arquivo[p];
     }
-    printf("Y: %d\n", y);
-    
-    
     nome_final[y] = '.';
     y++;
-
-    for(y, ui = 0; ui < nome_ext; y++, ui++)
+    //Agora é a extensao original
+    for(y, p = 0; p < tam_nome_ext; y++, p++)
     {
-        nome_final[y] = extensao[ui];
+        nome_final[y] = extensao[p];
     }
     nome_final[y] = '\0';
     printf("NOME FINAL: %s\n", nome_final);
 
 
     Huffman_tree *auxt = ht;
+
+    //Nesse fopen, o nome_final é o nome do arquivo antigo, como ele era antes de ser compactado
     FILE *arq = fopen(nome_final, "wt");
 
     for(i = 0; i < k ; i++)
@@ -400,6 +402,7 @@ void decompress()
     printf("Descompactado com sucesso!\n");
     fclose(arq);
     fclose (compressed);
+
     
 }
 int main()
