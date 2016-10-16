@@ -104,9 +104,7 @@ void decompress()
 {
 	FILE *compressed;
     unsigned char *buffer, aux1, aux2[3];
-    size_t result;
-    char aux[14];
-    int size = 0, coordenadas, trashSize, aux3, aux4, k, z, tamanho_total, tam_nome_ext, tamanho_senha, r, y, p;
+    int size = 0, coordenadas, trashSize, k, z, tamanho_total, tam_nome_ext, tamanho_senha, r, y, p;
     //Criamos uma arvore huffman vazia
     Huffman_tree *ht = create_empty();
 
@@ -134,13 +132,13 @@ void decompress()
             size = size + pow(2, u);
         }
     }
-        size = size + (aux2[1]);
+    size = size + (aux2[1]);
     
     printf("LIXO: %d TAMANHO ARVORE: %d\n", trashSize, size);  
 
-    char tree[size+1]; 
+    unsigned char tree[size+1];
     tree[size+1] = '\0';
-    fread(&tree, sizeof(char), size+1, compressed);
+    fread(&tree, sizeof(unsigned char), size+1, compressed);
     i = 0;
     ht = add(ht, tree);
     printf("TREE: %s\n", tree);
@@ -236,7 +234,7 @@ void decompress()
     free(buffer);
     free(array_resto);
     //Aqui juntamos o nome do arquivo original + a extensao original
-    char nome_final[tam_nome_arq + tam_nome_ext];
+    char nome_final[tam_nome_arq + tam_nome_ext + 2];
     //Primeiro é o nome do arquivo original
     for(y = 0, p = 0; y < tam_nome_arq; y++, p++)
     {
@@ -245,7 +243,7 @@ void decompress()
     nome_final[y] = '.';
     y++;
     //Agora é a extensao original
-    for(y, p = 0; p < tam_nome_ext; y++, p++)
+    for(p = 0; p < tam_nome_ext; y++, p++)
     {
         nome_final[y] = extensao[p];
     }
@@ -256,7 +254,7 @@ void decompress()
     Huffman_tree *auxt = ht;
 
     //Nesse fopen, o nome_final é o nome do arquivo antigo, como ele era antes de ser compactado
-    FILE *arq = fopen(nome_final, "wt");
+    FILE *arq = fopen(nome_final, "wb");
 
     for(i = 0; i < k ; i++)
     {
