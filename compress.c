@@ -14,14 +14,14 @@
 #define MAX_FILE 20
 #define MAX_EXT 6
 
-// Retorna um inteiro indicando se o bit está setado ou não
+// Retorna um inteiro indicando se o bit estÃ¡ setado ou nÃ£o
 int is_bit_i_set(unsigned char c, int i)
 {
     unsigned char mask = 1 << i;
     return mask & c;
 }
 
-//Retorna o inteiro recebido como parâmetro com o bit i setado
+//Retorna o inteiro recebido como parÃ¢metro com o bit i setado
 unsigned char set_bit(unsigned char c, int i)
 {
     unsigned char mask = 1 << i;
@@ -30,7 +30,7 @@ unsigned char set_bit(unsigned char c, int i)
 
 void compress()
 {
-	//Declaração das variáveis
+	//DeclaraÃ§Ã£o das variÃ¡veis
     unsigned char *code, aux, aux2, nula;
     int lixo, tabela[MAX], i, j, k, count;
     char nomeArquivo[MAX_FILE], nomeExtensao[MAX_EXT];
@@ -38,18 +38,18 @@ void compress()
     Node *raiz = NULL;
     HashHuff *hash = create_hash();
 
-    //Zera todos os valores da tabela de frequência
+    //Zera todos os valores da tabela de frequÃªncia
     for (i = 0; i < MAX; i++)
     {
         tabela[i] = 0;
     }
 
-    //Lê o nome do arquivo com a extensão
+    //LÃª o nome do arquivo com a extensÃ£o
     printf("Nome do arquivo:\n");
     scanf("%s", nomeArquivo);
 
     /*Verifica se foi inserido uma entrada valida (menos de 19 caracteres)
-     * Se sim salva a posição do ponto e verifica se a extensao tem menos do que 6 caracteres
+     * Se sim salva a posiÃ§Ã£o do ponto e verifica se a extensao tem menos do que 6 caracteres
      */
     for(i = 0; nomeArquivo[i] != '.' && nomeArquivo[i] != '\0';)
     {
@@ -57,28 +57,28 @@ void compress()
     }
     if(nomeArquivo[i] == '\0') //Chegou ao fnal sem achar ponto
     {
-    	printf("\aEntrada inválida!\n");
+    	printf("\aEntrada invÃ¡lida!\n");
     	system("PAUSE");
     	exit(0);
     }
     else
     {
-    	j = i; //salva a posição do ponto
+    	j = i; //salva a posiÃ§Ã£o do ponto
     	i++; // pula o ponto
     	for(k = 0; nomeArquivo[i] != '\0' && nomeArquivo[i] != '\n'; i++, k++)
     	{
     	    nomeExtensao[k] = nomeArquivo[i];
     	}
     	nomeExtensao[k] = '\0';
-    	if(k > 6) // extensão maior q a permitida
+    	if(k > 6) // extensÃ£o maior q a permitida
     	{
-    		printf("\aExtensao inválida!\n");
+    		printf("\aExtensao invÃ¡lida!\n");
     		system("PAUSE");
     		exit(0);
     	}
     }
 
-    //Abre o arquivo para leitura; se não for possível uma mensagem de erro é acionada e o programa para
+    //Abre o arquivo para leitura; se nÃ£o for possÃ­vel uma mensagem de erro Ã© acionada e o programa para
     arqE = fopen(nomeArquivo, "rb");
     if(arqE == NULL)
     {
@@ -87,7 +87,7 @@ void compress()
         exit(0);
     }
 
-    /*Lê caracter por caracter e incrementa sua frequencia na tabela também conta
+    /*LÃª caracter por caracter e incrementa sua frequencia na tabela tambÃ©m conta
      * quantos unsigneds chars tem no arquivo
      */
     count = 0;
@@ -97,9 +97,9 @@ void compress()
         tabela[aux]++;
         count++;
     }
-    tabela[aux]--; //Corrige a interferência do EOF
+    tabela[aux]--; //Corrige a interferÃªncia do EOF
 
-    //Cria a fila de prioridade e insere os caracteres com suas respectivas frequências
+    //Cria a fila de prioridade e insere os caracteres com suas respectivas frequÃªncias
     Priority_Queue *pq = create_priority_queue();
     for( i = 0; i < MAX; i++)
     {
@@ -110,19 +110,19 @@ void compress()
         }
     }
 
-    //Cria a árvore
+    //Cria a Ã¡rvore
     raiz = build_tree(pq);
 
-    //Declara e inicializa uma variável com o tamanho da árvore e uma lista q irá ser usada na hash
+    //Declara e inicializa uma variÃ¡vel com o tamanho da Ã¡rvore e uma lista q irÃ¡ ser usada na hash
     int tamArvore = tree_size(raiz);
     List* listacod = createlist();
 
     getcode(hash, raiz, listacod);
 
-    //Cria o arquivo de saída
-    arqS = fopen("compressed.huff", "w+");
+    //Cria o arquivo de saÃ­da
+    arqS = fopen("compressed.huff", "wb+");
 
-    //Verifica o tamanho da árvore: se ela for maior que 255, o primeiro byte também será usado
+    //Verifica o tamanho da Ã¡rvore: se ela for maior que 255, o primeiro byte tambÃ©m serÃ¡ usado
     if(tamArvore <= 255)
     {
         fprintf(arqS, "%c%c", 0, tamArvore);
@@ -132,9 +132,9 @@ void compress()
         fprintf(arqS, "%c%c", (tamArvore - 255), 255);
         printf("%c%c\n", (tamArvore - 255), 255);
     }
-    print_tree_pre_order(raiz, arqS); //Imprime a árvore no arquivo
+    print_tree_pre_order(raiz, arqS); //Imprime a Ã¡rvore no arquivo
 
-    //Escreve o tamanho da extensão no arquivo
+    //Escreve o tamanho da extensÃ£o no arquivo
     aux = k << 5;
     fprintf(arqS, "%c", aux);
     fputs(nomeExtensao, arqS);
@@ -150,20 +150,20 @@ void compress()
     rewind(arqE);
     nula = 0;
     j = 7;
-    while(count != 1) //contador de caracteres só vai até 1 devido ao EOF que é somado
+    while(count != 1) //contador de caracteres sÃ³ vai atÃ© 1 devido ao EOF que Ã© somado
     {
     	aux = fgetc(arqE);
         code = get(hash, aux); //pega os novos bits da hash
         for(i = 0; code[i] == '1' || code[i] == '0'; i++, j--)
         {
-            if(j == -1) // quando a variável nula está "cheia" printa e reseta nula e j
+            if(j == -1) // quando a variÃ¡vel nula estÃ¡ "cheia" printa e reseta nula e j
             {
                 fprintf(arqS, "%c", nula);
                 nula = 0;
                 j = 8;
                 i--;
             }
-            else if(code[i] == '1') // só seta se for 1, se não for só continua
+            else if(code[i] == '1') // sÃ³ seta se for 1, se nÃ£o for sÃ³ continua
             {
                 nula = set_bit(nula, j);
             }
@@ -173,7 +173,7 @@ void compress()
     fprintf(arqS, "%c", nula);
 
     lixo = j;
-    if(lixo == 0 || lixo == -1) // não tem lixo
+    if(lixo == 0 || lixo == -1) // nÃ£o tem lixo
     {
         fclose(arqS);
     }
