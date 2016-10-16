@@ -1,7 +1,7 @@
 /*
- * Hash.h
+ * hash.h
  *
- *  Created on: 26 de set de 2016
+ *  Created on: 13 de out de 2016
  *      Author: vitor_000
  */
 
@@ -22,7 +22,7 @@ typedef struct hash HashHuff;
 
 HashHuff* create_hash();
 
-char* get(HashHuff *ht, unsigned char key);
+unsigned char* get(HashHuff *ht, unsigned char key);
 
 void put(HashHuff *ht, unsigned char key, List* l);
 

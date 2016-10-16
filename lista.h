@@ -1,3 +1,10 @@
+/*
+ * lista.h
+ *
+ *  Created on: 13 de out de 2016
+ *      Author: vitor_000
+ */
+
 #ifndef LISTA_H_
 #define LISTA_H_
 
@@ -11,13 +18,13 @@ typedef struct list List;
 
 List* createlist();
 
-void insertnode(List* l, char c);
+void insertnode(List* l, unsigned char c);
 
 int listsize(List* list);
 
-char* getstring(List* l);
+unsigned char* getstring(List* l);
 
-char removenode(List* l);
+void removenode(List* l);
 
 void printlist(List* l);
 

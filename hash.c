@@ -1,7 +1,7 @@
 /*
- * Hash.c
+ * hash.c
  *
- *  Created on: 26 de set de 2016
+ *  Created on: 13 de out de 2016
  *      Author: vitor_000
  */
 
@@ -17,7 +17,7 @@
 typedef struct element
 {
 	unsigned char value;
-	char* code;
+	unsigned char* code;
 }Element;
 
 typedef struct hash
@@ -38,7 +38,7 @@ HashHuff* create_hash()
 	return ht;
 }
 
-char* get(HashHuff *ht, unsigned char key)
+unsigned char* get(HashHuff *ht, unsigned char key)
 {
 	return ht->table[key]->code;
 }
@@ -46,14 +46,13 @@ char* get(HashHuff *ht, unsigned char key)
 void put(HashHuff *ht, unsigned char key, List* l)
 {
 	int tam, h;
-	char aux;
 	Element* new_e = (Element*) malloc(sizeof(Element));
 
 	h = key % MAX_HASH;
 	new_e->value = key;
 
 	tam = listsize(l);
-	
+
 	new_e->code = getstring(l);
 
 	ht->table[h] = new_e;

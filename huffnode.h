@@ -1,7 +1,7 @@
 /*
- * priorityqueue.h
+ * huffnode.h
  *
- *  Created on: 25 de set de 2016
+ *  Created on: 13 de out de 2016
  *      Author: vitor_000
  */
 

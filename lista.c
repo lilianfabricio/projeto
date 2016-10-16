@@ -1,21 +1,25 @@
+/*
+ * lista.c
+ *
+ *  Created on: 13 de out de 2016
+ *      Author: vitor_000
+ */
 #ifndef LISTA_C_
 #define LISTA_C_
 
 #include "lista.h"
 
-typedef struct node_list NodeList;
-struct node_list
+typedef struct node_list
 {
-	char c;
+	unsigned char c;
 	NodeList* next;
-};
+}NodeList;
 
-typedef struct list List;
-struct list
+typedef struct list
 {
 	NodeList* first;
 	int tam;
-};
+}List;
 
 List* createlist()
 {
@@ -26,7 +30,7 @@ List* createlist()
 	return newlist;
 }
 
-void insertnode(List* l, char c)
+void insertnode(List* l, unsigned char c)
 {
 	NodeList* aux = (NodeList*) malloc(sizeof(NodeList));
 	aux->c = c;
@@ -48,13 +52,13 @@ int listsize(List* list)
 	return list->tam;
 }
 
-char* getstring(List* l)
+unsigned char* getstring(List* l)
 {
 	int i, tam;
 	NodeList* aux = l->first;
 
 	tam = listsize(l);
-	char* string = (char*) malloc((tam+1)*sizeof(char));
+	unsigned char* string = (unsigned char*) malloc((tam+1)*sizeof(unsigned char));
 	for(i = (tam-1); aux != NULL; i--)
 	{
 		string[i] = aux->c;
@@ -65,9 +69,8 @@ char* getstring(List* l)
 	return string;
 }
 
-char removenode(List* l)
+void removenode(List* l)
 {
-	char c;
 	if(l->first != NULL)
 	{
 		NodeList* aux;
@@ -75,17 +78,10 @@ char removenode(List* l)
 		aux = l->first;
 		l->first = aux->next;
 		aux->next = NULL;
-		c = aux->c;
 		l->tam--;
 
 		free(aux);
 	}
-	else
-	{
-		c = 'e';
-	}
-
-	return c;
 }
 
 void printlist(List* l)
