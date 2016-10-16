@@ -46,7 +46,7 @@ void compress()
 
     //Lê o nome do arquivo com a extensão
     printf("Nome do arquivo:\n");
-    gets(nomeArquivo);
+    scanf("%s", nomeArquivo);
 
     /*Verifica se foi inserido uma entrada valida (menos de 19 caracteres)
      * Se sim salva a posição do ponto e verifica se a extensao tem menos do que 6 caracteres
@@ -63,8 +63,9 @@ void compress()
     }
     else
     {
-    	j = i;
-    	for( k = 0; nomeArquivo[i] != '\0'; i++, k++)
+    	j = i; //salva a posição do ponto
+    	i++; // pula o ponto
+    	for(k = 0; nomeArquivo[i] != '\0' && nomeArquivo[i] != '\n'; i++, k++)
     	{
     	    nomeExtensao[k] = nomeArquivo[i];
     	}
