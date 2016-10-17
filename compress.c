@@ -33,7 +33,7 @@ void compress()
 	//Declaração das variáveis
     unsigned char *code, aux, aux2, nula;
     int lixo, tabela[MAX], i, j, k, count;
-    char nomeArquivo[MAX_FILE], nomeExtensao[MAX_EXT];
+    unsigned char nomeArquivo[MAX_FILE], nomeExtensao[MAX_EXT];
     FILE *arqE, *arqS;
     Node *raiz = NULL;
     HashHuff *hash = create_hash();
