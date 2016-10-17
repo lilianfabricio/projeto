@@ -16,7 +16,7 @@ int main()
     install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL);
     set_color_depth(32);
     set_gfx_mode(GFX_AUTODETECT_WINDOWED, 800, 600, 0, 0);
-    set_window_title("Tutorial 7 - Mouse");
+    set_window_title("GJVL2 D-COMPILER");
 
     exit_program = FALSE;
     LOCK_FUNCTION(fecha_programa);
