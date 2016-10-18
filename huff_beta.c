@@ -5,16 +5,14 @@
 #include "huffnode.h"
 #include "lista.h"
 #include <string.h>
-#include <openssl/md5.h>
+//#include <openssl/md5.h>
 
 
 #define MAX 256
 #define MAX_FILE 20
 #define MAX_EXT 6
 #define MAX_KEY 20
-
 int i;
-
 int is_bit_i_set(unsigned char c, int i)
 {
     unsigned char mask = 1 << i;
@@ -22,11 +20,11 @@ int is_bit_i_set(unsigned char c, int i)
 }
 struct tree
 {
-    char letter;
+    unsigned char letter;
     struct tree *left;
     struct tree *right;
 };
-void md5(const unsigned char *senha)
+/*void md5(const unsigned char *senha)
 {
    //supondo que a senha seja huffman
    const char tentativa[100];
@@ -34,7 +32,7 @@ void md5(const unsigned char *senha)
    scanf("%s", tentativa);
    int i;
    /*MD5_DIGEST_LENGTH é 16, no caso 16 bytes em decimal. No entanto, como geralmente 
-   a hash md5 é salva em 32 bits hexa, no arquivo são salvos os 32 bytes*/
+   a hash md5 é salva em 32 bits hexa, no arquivo são salvos os 32 bytes
    unsigned char result[MD5_DIGEST_LENGTH];
 
    //A funçao cria o MD5 a partir da string e salva em result
@@ -55,7 +53,7 @@ void md5(const unsigned char *senha)
       exit(1);
    }
 }
-
+*/
 typedef struct tree Huffman_tree;
 
 Huffman_tree* create_empty()
@@ -106,7 +104,6 @@ Huffman_tree* add(Huffman_tree *ht, unsigned char *string)
      {
         i++;
         ht = create_tree(string[i], NULL, NULL);
-        printf("%c", string[i]);
         i++;
         return ht;
      }
@@ -120,11 +117,8 @@ Huffman_tree* add(Huffman_tree *ht, unsigned char *string)
     }
     else
     {
-       
-
         ht = create_tree(string[i], NULL, NULL);
         i++;
- 
         return ht;
     }
     return ht;
@@ -136,7 +130,7 @@ unsigned char set_bit(unsigned char c, int i)
     return mask | c;
 }
 
-FILE* compress()
+void compress()
 {
     //Declaração das variáveis
     unsigned char *code, aux, aux2, nula;
@@ -282,9 +276,8 @@ FILE* compress()
     if(lixo == 0 || lixo == -1) // não tem lixo
     {
         printf("Compactado com sucesso\n");
-
-        fclose(arqE);
         return arqS;
+        fclose(arqE);
     }
     else
     {
@@ -296,9 +289,8 @@ FILE* compress()
         fprintf(arqS, "%c", aux2);
 
         printf("Compactado com sucesso\n");
-
-        fclose(arqE);
         return arqS;
+        fclose(arqE);
     }
 }
 
@@ -306,10 +298,9 @@ void decompress()
 {
 
     FILE *compressed;
-    unsigned char *buffer, aux1, aux2[3];
-    size_t result;
+    unsigned char aux_tam_lixo, aux_tam_arv[3], aux_tam_ext, aux_tam_nome, aux_texto;
     unsigned aux[14];
-    int size = 0, coordenadas, trashSize, aux3, aux4, k, z, tamanho_total, tam_nome_ext, tamanho_senha, r, y, p;
+    int  tam_arv = 0, coordenadas, tam_lixo, k, z, tamanho_total, tam_nome_ext, tamanho_senha, r, y, p, j, stop, tam_nome_arq;
     //Criamos uma arvore huffman vazia
     Huffman_tree *ht = create_empty();
 
@@ -320,45 +311,47 @@ void decompress()
         exit (1);
     }
 
-    //Aqui foi lido o primeiro byte
-    fread (&aux1, sizeof(unsigned char), 1, compressed);
-
-    aux1 = aux1 >> 5;
-    //Pegamos o tamanho do lixo, "setando" 5 bits para a direita
-    trashSize = aux1;
-    //O arquivo volta para o início
-    rewind (compressed);
-    //Lemos os dois proximos bytes, pra pegarmos o tamanho da arvore
-    fread (&aux2, sizeof(unsigned char), 2, compressed);
-    for(int u = 8, h = 0; h < 5; h++, u++)
-    {
-        if(is_bit_i_set(aux2[0], h))
-        {
-            size = size + pow(2, u);
-        }
-    }
-        size = size + (aux2[1]);
-    
-    //printf("LIXO: %d TAMANHO ARVORE: %d\n", trashSize, size);  
-
-    unsigned char tree[size+1]; 
-    tree[size+1] = '\0';
-    fread(&tree, sizeof(char), size, compressed);
-    i = 0;
-    ht = add(ht, tree);
-    //printf("TREE: %s\n", tree);
-
-
     fseek (compressed, 0, SEEK_END);
     tamanho_total = ftell(compressed);
     rewind(compressed);
-    buffer = (unsigned char*) malloc (sizeof(unsigned char)*tamanho_total);
-    fread (buffer, 1, tamanho_total, compressed);
 
-    aux1 = buffer[2 + size];
+    //Aqui foi lido o primeiro byte
+    fread (&aux_tam_lixo, sizeof(unsigned char), 1, compressed);
 
-    tam_nome_ext = aux1 >> 5;
-    //Essa parte deve aparecer na interface grafica
+    //tamanho_total--;
+    aux_tam_lixo = aux_tam_lixo >> 5;
+    //Pegamos o tamanho do lixo, deslocando 5 bits para a direita
+    tam_lixo = aux_tam_lixo;
+    //O arquivo volta para o início
+    rewind (compressed);
+    //Lemos os dois proximos bytes, pra pegarmos o tamanho da arvore
+    fread (&aux_tam_arv, sizeof(unsigned char), 2, compressed);
+    for(int u = 8, h = 0; h < 5; h++, u++)
+    {
+        if(is_bit_i_set(aux_tam_arv[0], h))
+        {
+            tam_arv = tam_arv + pow(2, u);
+        }
+    }
+    tam_arv = tam_arv + (aux_tam_arv[1]);
+    tamanho_total--;
+
+    //printf("LIXO: %d TAMANHO ARVORE: %d\n", tam_lixo, tam_arv);  
+
+    unsigned char tree[tam_arv+1]; 
+    tree[tam_arv+1] = '\0';
+    fread(&tree, sizeof(char), tam_arv, compressed);
+    i = 0;
+    ht = add(ht, tree);
+    //printf("TREE: %s\n", tree);
+    
+    tamanho_total = tamanho_total - tam_arv;
+
+    fread(&aux_tam_ext, sizeof(unsigned char), 1, compressed);
+    tamanho_total--;
+
+    tam_nome_ext = aux_tam_ext >> 5;
+
     if(tam_nome_ext > 6)
     {
         printf("Não é possivel decompactar o arquivo informado.\n");
@@ -367,73 +360,37 @@ void decompress()
 
     tamanho_senha = 32;   
 
-    char extensao[tam_nome_ext], senha[33];
+    unsigned char extensao[tam_nome_ext], senha[33];
 
     //Aqui pegamos qual é a extensão do arquivo
-    for(r = 0, y = (3 + size); r < tam_nome_ext; r++, y++)
-    {
-        extensao[r] = buffer[y];
-    }
-    extensao[r] = '\0';
+    fread(&extensao, sizeof(unsigned char), tam_nome_ext, compressed);
+    extensao[tam_nome_ext] = '\0';
+
+    tamanho_total = tamanho_total - tam_nome_ext;
+
     //printf("EXTENSAO: %s\n", extensao);
 
     //Pegando a senha:
-
-    for(r = 0, y = (3 + size + tam_nome_ext); r < 32; r++, y++)
-    {
-        
-        senha[r] = buffer[y];
-    }
-    senha[r] = '\0';
+    
+    fread(&senha, sizeof(unsigned char), 32, compressed);
+    senha[32] = '\0';
     //printf("SENHA: %s\n", senha);
     md5(senha);
-    
-    //Y é onde esta localizado o byte (no buffer) que possui o tamanho do nome do arquivo.
-    y = 35 + size + tam_nome_ext;
-    int tam_nome_arq = buffer[y];    
+    tamanho_total = tamanho_total - 32;
+
+    fread(&aux_tam_nome, sizeof(unsigned char), 1, compressed);
+    tamanho_total--;
+    tam_nome_arq = aux_tam_nome;
     //printf("TAMANHO DO NOME: %d\n", tam_nome_arq);
-    y++;
 
     //Aqui pegamos o nome do arquivo original
     unsigned char nome_arquivo[tam_nome_arq];
-    for(r = y, p = 0; p < tam_nome_arq; r++, y++, p++)
-    {
-        nome_arquivo[p] = buffer[y];
-    }
-    nome_arquivo[p] = '\0';
-    //printf("NOME ARQUIVO: %s\n", nome_arquivo);
+    fread(&nome_arquivo, sizeof(unsigned char), tam_nome_arq, compressed);
+    tamanho_total = tamanho_total - tam_nome_arq;
 
-    //Aqui pegamos as coordenadas da descompressao.
-    //36 = 2 bytes (lixo + tamanho arvore) + arvore + tamanho do nome da ext + tamanho do nome.    
-    coordenadas = tamanho_total - (36 + size + tam_nome_ext + tam_nome_arq);
-
-    unsigned char *array_resto;
-
-    array_resto = (unsigned char*) malloc (sizeof(unsigned char)*coordenadas); 
-
-    for(int r = 0, o = (4 + size + tam_nome_ext + tamanho_senha + tam_nome_arq); r < coordenadas; r++, o++)
-    {
-        array_resto[r] = buffer[o];
-    }
-    //printf("TAMANHO EXTENSAO: %d, TAMANHO TOTAL: %d, COORDENADAS: %d\n", tam_nome_ext, tamanho_total, coordenadas);
+    //printf("NOME ARQUIVO: %s\n", nome_arquivo);  
+    //printf("TAMANHO EXTENSAO: %d\n", tam_nome_ext);
     
-    //Aqui é o mesmo de antes 
-    int binario[coordenadas * 8];
-    unsigned char a;
-    k = 0;
-
-    //MUDAR ISSOOOOOOOO
-    for(i = 0; i < coordenadas; i++)
-    {
-        a = array_resto[i];
-        for (z = 0; z < 8; z++, k++) 
-        {
-            binario[k] = !!((a << z) & 0x80);
-        }
-    }
-    k = k - trashSize - 1;
-    free(buffer);
-    free(array_resto);
     //Aqui juntamos o nome do arquivo original + a extensao original
     unsigned char nome_final[tam_nome_arq + tam_nome_ext];
     //Primeiro é o nome do arquivo original
@@ -451,34 +408,44 @@ void decompress()
     nome_final[y] = '\0';
     //printf("NOME FINAL: %s\n", nome_final);
 
-
     Huffman_tree *auxt = ht;
 
     //Nesse fopen, o nome_final é o nome do arquivo antigo, como ele era antes de ser compactado
-    FILE *arq = fopen(nome_final, "wt");
-
-    for(i = 0; i < k ; i++)
+    FILE *arq = fopen(nome_final, "wb");
+    for(i = tamanho_total - 1; i > 0 ; i--)
     {
-        if(binario[i] == 0)
+        fread(&aux_texto, sizeof(unsigned char), 1, compressed);
+        if(i == 1)
         {
-            auxt = auxt->left;
+            stop = tam_lixo - 1;
         }
         else
         {
-            auxt = auxt->right;
+            stop = -1;
         }
-        if(isleaf(auxt))
+        for(j = 7; j > stop; j--)
         {
-            fprintf(arq,"%c",  auxt->letter);
-            auxt = ht;
+            if(is_bit_i_set(aux_texto, j))
+            {
+                auxt = auxt->right;
+            }
+            else
+            {
+                auxt = auxt->left;
+            }
+            if(isleaf(auxt))
+            {
+                fprintf(arq, "%c", auxt->letter);
+                auxt = ht;
+            }
         }
+        
     }   
     printf("Descompactado com sucesso!\n");
     fclose(arq);
     fclose (compressed);
-
-    
 }
+
 int main()
 {
     int opcao;
@@ -487,15 +454,10 @@ int main()
     switch (opcao)
     {
         case 1:
-            FILE *arquivo, *temporario;
-            unsigned char senha[MAX_KEY], byte;
-            int contador, tamArvore;
+            FILE *arquivo;
+            unsigned char senha[MAX_KEY];
             
-            for(contador = 0; contador < 3; contador++)
-            {
-                arquivo = compress();
-            }
-            temporario = tmpfile();
+            arquivo = compress();
             
             //Lê a senha para compactar o arquivo
             printf("Por favor, digite uma senha para compactar o arquivo\n");
@@ -506,12 +468,8 @@ int main()
             MD5(senha, strlen(senha), result);
             for(i = 0; i < MD5_DIGEST_LENGTH; i++)
             {
-                fprintf(temporario, "%02x", result[i]);
+                fprintf(arqS, "%02x", result[i]);
             }
-            
-            rewind(arquivo);
-            byte =
-            
             break;
         case 2:
             decompress();
