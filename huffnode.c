@@ -153,9 +153,9 @@ void print_tree_pre_order(Node *root, FILE *arq)
 {
 	if(root != NULL)
 	{
-		if(root->item == '*' && root->left == NULL && root->right == NULL)
+		if((root->item == '*' || root->item == '\\') && is_leaf(root))
 		{
-			fprintf(arq, "%c%c%c", '\\\\', root->item);
+			fprintf(arq, "%c%c", '\\', root->item);
 		}
 		else
 		{
@@ -172,7 +172,8 @@ int tree_size(Node *root)
 	{
 		return 0;
 	}
-	else if((root->item == '*' || root->item == '\\') && is_leaf(root)){
+	else if((root->item == '*' || root->item == '\\') && is_leaf(root))
+	{
 		return 2;
 	}
 	else
