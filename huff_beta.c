@@ -134,12 +134,12 @@ unsigned char set_bit(unsigned char c, int i)
     return mask | c;
 }
 
-void compress()
+FILE* compress()
 {
     //Declaração das variáveis
     unsigned char *code, aux, aux2, nula;
     int lixo, tabela[MAX], i, j, k, count, key_size = 32;
-    char nomeArquivo[MAX_FILE], nomeExtensao[MAX_EXT], senha[MAX_KEY];
+    unsigned char nomeArquivo[MAX_FILE], nomeExtensao[MAX_EXT];
     FILE *arqE, *arqS;
     Node *raiz = NULL;
     HashHuff *hash = create_hash();
@@ -193,10 +193,6 @@ void compress()
         exit(0);
     }
 
-    //Lê a senha para compactar o arquivo
-    printf("Por favor, digite uma senha para compactar o arquivo\n");
-    scanf("%s", senha);
-
     /*Lê caracter por caracter e incrementa sua frequencia na tabela também conta
      * quantos unsigneds chars tem no arquivo
      */
@@ -249,14 +245,6 @@ void compress()
     fprintf(arqS, "%c", aux);
     fputs(nomeExtensao, arqS);
 
-    // Imprime a senha no formato md5, no arquivo comprimido
-    unsigned char result[MD5_DIGEST_LENGTH];
-    MD5(senha, strlen(senha), result);
-    for(i = 0; i < MD5_DIGEST_LENGTH; i++)
-    {
-        fprintf(arqS, "%02x", result[i]);
-    }
-
     //Coloca o \0 do final do nome do arquivo no lugar certo
     nomeArquivo[j] = '\0';
     fprintf(arqS, "%c", j); // Escrevendo o char correspondente ao tamanho do nome do arquivo
@@ -291,7 +279,10 @@ void compress()
     lixo = j;
     if(lixo == 0 || lixo == -1) // não tem lixo
     {
-        fclose(arqS);
+        printf("Compactado com sucesso\n");
+
+        fclose(arqE);
+        return arqS;
     }
     else
     {
@@ -302,12 +293,11 @@ void compress()
         rewind(arqS);
         fprintf(arqS, "%c", aux2);
 
-        fclose(arqS);
+        printf("Compactado com sucesso\n");
+
+        fclose(arqE);
+        return arqS;
     }
-
-    printf("Compactado com sucesso\n");
-
-    fclose(arqE);
 }
 
 void decompress() 
@@ -495,7 +485,22 @@ int main()
     switch (opcao)
     {
         case 1:
-            compress();
+            FILE *arquivo;
+            unsigned char senha[MAX_KEY];
+            
+            arquivo = compress();
+            
+            //Lê a senha para compactar o arquivo
+            printf("Por favor, digite uma senha para compactar o arquivo\n");
+            scanf("%s", senha);
+            
+            // Imprime a senha no formato md5, no arquivo comprimido
+            unsigned char result[MD5_DIGEST_LENGTH];
+            MD5(senha, strlen(senha), result);
+            for(i = 0; i < MD5_DIGEST_LENGTH; i++)
+            {
+                fprintf(arqS, "%02x", result[i]);
+            }
             break;
         case 2:
             decompress();
