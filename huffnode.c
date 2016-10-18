@@ -27,8 +27,8 @@ typedef struct pqueue
 	Node *last;
 }Priority_Queue;
 
-/* Função create_node: Aloca um espaço de memória correspondente a um nó,
- * enviando como parâmetros um caracter e sua frequência no texto.
+/* FunÃ§Ã£o create_node: Aloca um espaÃ§o de memÃ³ria correspondente a um nÃ³,
+ * enviando como parÃ¢metros um caracter e sua frequÃªncia no texto.
  */
 Node* create_node(unsigned char carac, int freq)
 {
@@ -44,7 +44,7 @@ Node* create_node(unsigned char carac, int freq)
 	return new_node;
 }
 
-/* Função create_priority_queue: Aloca um espaço de memória correspondente a
+/* FunÃ§Ã£o create_priority_queue: Aloca um espaÃ§o de memÃ³ria correspondente a
  * uma fila de prioridades vazia.
  */
 Priority_Queue* create_priority_queue()
@@ -56,18 +56,18 @@ Priority_Queue* create_priority_queue()
 	return new_pq;
 }
 
-/* Funçâo is_unique: Dada uma fila de prioridades, a função verifica se
- * esta fila possui apenas um elemento. A função será utilizada na
- * construção da árvore de Huffman.
+/* FunÃ§Ã¢o is_unique: Dada uma fila de prioridades, a funÃ§Ã£o verifica se
+ * esta fila possui apenas um elemento. A funÃ§Ã£o serÃ¡ utilizada na
+ * construÃ§Ã£o da Ã¡rvore de Huffman.
  */
 int is_unique(Priority_Queue *pq)
 {
 	return (pq->first->next == NULL);
 }
 
-/* Função enqueue_sorted: Dada uma fila de prioridades e um nó, a função
- * insere este nó na fila de prioridade, em sua devida posição tendo
- * como parâmetro de ordenação sua frequência no texto.
+/* FunÃ§Ã£o enqueue_sorted: Dada uma fila de prioridades e um nÃ³, a funÃ§Ã£o
+ * insere este nÃ³ na fila de prioridade, em sua devida posiÃ§Ã£o tendo
+ * como parÃ¢metro de ordenaÃ§Ã£o sua frequÃªncia no texto.
  */
 void enqueue_sorted(Priority_Queue *pq, Node *node)
 {
@@ -155,7 +155,7 @@ void print_tree_pre_order(Node *root, FILE *arq)
 	{
 		if(root->item == '*' && root->left == NULL && root->right == NULL)
 		{
-			fprintf(arq, "%c%c", '\\', root->item);
+			fprintf(arq, "%c%c%c", '\\\\', root->item);
 		}
 		else
 		{
