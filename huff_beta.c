@@ -12,7 +12,9 @@
 #define MAX_FILE 20
 #define MAX_EXT 6
 #define MAX_KEY 20
+
 int i;
+
 int is_bit_i_set(unsigned char c, int i)
 {
     unsigned char mask = 1 << i;
@@ -485,10 +487,15 @@ int main()
     switch (opcao)
     {
         case 1:
-            FILE *arquivo;
-            unsigned char senha[MAX_KEY];
+            FILE *arquivo, *temporario;
+            unsigned char senha[MAX_KEY], byte;
+            int contador, tamArvore;
             
-            arquivo = compress();
+            for(contador = 0; contador < 3; contador++)
+            {
+                arquivo = compress();
+            }
+            temporario = tmpfile();
             
             //Lê a senha para compactar o arquivo
             printf("Por favor, digite uma senha para compactar o arquivo\n");
@@ -499,8 +506,12 @@ int main()
             MD5(senha, strlen(senha), result);
             for(i = 0; i < MD5_DIGEST_LENGTH; i++)
             {
-                fprintf(arqS, "%02x", result[i]);
+                fprintf(temporario, "%02x", result[i]);
             }
+            
+            rewind(arquivo);
+            byte =
+            
             break;
         case 2:
             decompress();
